@@ -1,0 +1,7 @@
+@font-face {
+  font-family: "Avenir";
+  src: local("Avenir Regular"), local("AzoSans-Thin"),
+    url("./Avenir-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
