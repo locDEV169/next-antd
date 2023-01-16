@@ -1,21 +1,22 @@
-import React, { FC, useState } from 'react';
-import styles from './styles.module.less';
-import { Button, Layout, Modal, notification } from 'antd';
-import Link from 'next/link';
-import { signIn } from 'next-auth/react';
-import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import { useAuthRequestChallengeEvm } from '@moralisweb3/next';
 import { InjectedConnector } from '@wagmi/core';
+import { Button, Layout, Modal, notification } from 'antd';
 import { useTrezor } from 'components/Trezor';
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { web3Actions } from 'store/web3-slice';
 import { useAppDispatch } from 'hooks';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { FC, useState } from 'react';
+import { web3Actions } from 'store/web3-slice';
+import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import styles from './styles.module.less';
 
 const { Header, Content, Footer } = Layout;
 
 const MainLayout: FC = ({ children }) => {
+  const { data } = useSession();
   const [openModal, setOpenModal] = useState(false);
   const { isConnected } = useAccount();
   const { connectAsync } = useConnect({ connector: new InjectedConnector() });
@@ -55,6 +56,7 @@ const MainLayout: FC = ({ children }) => {
       // console.log('---------', signature);
 
       await signIn('moralis-auth', { message: challenge.message, signature, network: 'Evm', redirect: false });
+      setOpenModal(false);
     } catch (e) {
       notification.error({
         message: 'Oops, something went wrong...',
@@ -91,6 +93,7 @@ const MainLayout: FC = ({ children }) => {
       console.log('---------', signature);
 
       await signIn('moralis-auth', { message: challenge.message, signature, network: 'Evm', redirect: false });
+      setOpenModal(false);
     } catch (e) {
       notification.error({
         message: 'Oops, something went wrong...',
@@ -125,6 +128,7 @@ const MainLayout: FC = ({ children }) => {
       const signature = await signMessageAsync({ message: challenge.message });
 
       await signIn('moralis-auth', { message: challenge.message, signature, network: 'Evm', redirect: false });
+      setOpenModal(false);
     } catch (error) {
       notification.error({
         message: 'Oops, something went wrong...',
@@ -161,6 +165,11 @@ const MainLayout: FC = ({ children }) => {
     }
   };
 
+  const handleDisconnect = async () => {
+    await disconnectAsync();
+    signOut({ callbackUrl: '/' });
+  };
+
   return (
     <Layout className={styles.root}>
       <Header className={styles.header}>
@@ -169,9 +178,15 @@ const MainLayout: FC = ({ children }) => {
           <Link href="/profile">Profile</Link>
         </div>
         <div className={styles.headerRight}>
-          <Button type="primary" onClick={() => showModal()} className={styles.buttonConnect}>
-            Connect Wallet
-          </Button>
+          {data?.user ? (
+            <Button type="primary" onClick={() => handleDisconnect()} className={styles.addressConnect}>
+              {data.user.address}
+            </Button>
+          ) : (
+            <Button type="primary" onClick={() => showModal()} className={styles.buttonConnect}>
+              Connect Wallet
+            </Button>
+          )}
         </div>
         <Modal
           title="Connect a Wallet"

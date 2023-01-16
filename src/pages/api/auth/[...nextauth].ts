@@ -1,5 +1,5 @@
-import NextAuth from "next-auth";
-import { MoralisNextAuthProvider } from "@moralisweb3/next";
+import NextAuth from 'next-auth';
+import { MoralisNextAuthProvider } from '@moralisweb3/next';
 
 export default NextAuth({
   providers: [MoralisNextAuthProvider()],
