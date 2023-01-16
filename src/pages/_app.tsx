@@ -17,20 +17,21 @@ import {
   polygonMumbai,
   sepolia,
 } from '@wagmi/core/chains';
+import { TrezorProvider } from 'components/Trezor';
+import { useRouteLoading } from 'hooks/useRouteLoading';
+import Layout from 'Layout';
+import { SessionProvider } from 'next-auth/react';
+import { appWithTranslation } from 'next-i18next';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
 import { FC, useState } from 'react';
-import 'styles/globals.less';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
-import { appWithTranslation } from 'next-i18next';
-import Head from 'next/head';
-import { AppProps } from 'next/app';
 import store from 'store';
-import { useRouteLoading } from 'hooks/useRouteLoading';
-import Layout from 'Layout';
+import 'styles/globals.less';
 import { createClient, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
-import { SessionProvider } from 'next-auth/react';
 
 const queryClientOption = {
   defaultOptions: {
@@ -81,9 +82,11 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
           <Hydrate state={pageProps.dehydratedState}>
             <WagmiConfig client={client}>
               <SessionProvider session={pageProps.session} refetchInterval={0}>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
+                <TrezorProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </TrezorProvider>
               </SessionProvider>
             </WagmiConfig>
             <ReactQueryDevtools initialIsOpen={false} />
