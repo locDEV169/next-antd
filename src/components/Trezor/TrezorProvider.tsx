@@ -93,7 +93,7 @@ export const TrezorProvider: FC<any> = ({ children }: ReactNode | any): ReactEle
   const signWallet = async (
     walletAddress: string,
     serializedPath: string,
-    options?: { email: string; password: string; last_claim_error?: number; total?: number },
+    options?: { email: string; password: string; last_claim_error?: number; total?: number }
   ) => {
     interface dataResultsType {
       success: boolean;
@@ -179,7 +179,7 @@ export const TrezorProvider: FC<any> = ({ children }: ReactNode | any): ReactEle
     // const serializedTransaction = utils.serializeTransaction({ ...txParams, nonce }, sig);
     // const res: any = await web3Write.eth.sendSignedTransaction(serializedTransaction);
     // console.log(res);
-    
+
     return signTx;
   };
 
