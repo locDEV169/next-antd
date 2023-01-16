@@ -9,6 +9,8 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { getHelloMessage, setHelloMessage } from 'store/ducks/hello/slide';
 import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import styles from './styles.module.less';
 
@@ -33,31 +35,26 @@ const Home: NextPage = () => {
   const connectMetaMark = async () => {
     console.log('connectMetaMark');
     try {
-      // if (isConnected) {
-      //   await disconnectAsync();
-      // }
-      await disconnectAsync();
+      if (isConnected) {
+        await disconnectAsync();
+      }
 
-      // const { account, chain } = await connectAsync();
       const { account, chain } = await connectAsync({
-        connector: new MetaMaskConnector()
+        connector: new MetaMaskConnector(),
       });
       console.log('-------------- ', account, chain);
 
       const challenge = await requestChallengeAsync({ address: account, chainId: chain.id });
-      console.log('challenge', challenge);
 
       if (!challenge) {
-        console.log('error', challenge);
         throw new Error('No challenge received');
       }
 
       const signature = await signMessageAsync({ message: challenge.message });
-      console.log('---------', signature);
-      
+      // console.log('---------', signature);
+
       await signIn('moralis-auth', { message: challenge.message, signature, network: 'Evm', redirect: false });
     } catch (e) {
-      console.log('aaaa', e);
       notification.error({
         message: 'Oops, something went wrong...',
         description: (e as { message: string })?.message,
@@ -66,12 +63,74 @@ const Home: NextPage = () => {
     }
   };
 
-  const connectCoinBase = () => {
+  const connectCoinBase = async () => {
     console.log('connectCoinBase');
+    try {
+      if (isConnected) {
+        await disconnectAsync();
+      }
+
+      const { account, chain } = await connectAsync({
+        connector: new CoinbaseWalletConnector({
+          // chains,
+          options: {
+            appName: 'Mitsuwa',
+          },
+        }),
+      });
+      // console.log('-------------- ', account, chain);
+
+      const challenge = await requestChallengeAsync({ address: account, chainId: chain.id });
+
+      if (!challenge) {
+        throw new Error('No challenge received');
+      }
+
+      const signature = await signMessageAsync({ message: challenge.message });
+      console.log('---------', signature);
+
+      await signIn('moralis-auth', { message: challenge.message, signature, network: 'Evm', redirect: false });
+    } catch (e) {
+      notification.error({
+        message: 'Oops, something went wrong...',
+        description: (e as { message: string })?.message,
+        placement: 'bottomRight',
+      });
+    }
   };
 
-  const connectWalletConnect = () => {
+  const connectWalletConnect = async () => {
     console.log('connectWalletConnect');
+    try {
+      if (isConnected) {
+        await disconnectAsync();
+      }
+
+      const { account, chain } = await connectAsync({
+        connector: new WalletConnectConnector({
+          options: {
+            qrcode: true,
+          },
+        }),
+      });
+      // console.log('-------------- ', account, chain);
+
+      const challenge = await requestChallengeAsync({ address: account, chainId: chain.id });
+
+      if (!challenge) {
+        throw new Error('No challenge received');
+      }
+
+      const signature = await signMessageAsync({ message: challenge.message });
+
+      await signIn('moralis-auth', { message: challenge.message, signature, network: 'Evm', redirect: false });
+    } catch (error) {
+      notification.error({
+        message: 'Oops, something went wrong...',
+        description: (error as { message: string })?.message,
+        placement: 'bottomRight',
+      });
+    }
   };
 
   const connecTrezor = () => {
