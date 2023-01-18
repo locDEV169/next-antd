@@ -1,24 +1,16 @@
-import { utils } from 'ethers';
-import React, { FC, useState, useRef, ReactNode, ReactElement } from 'react';
-import {
-  AXIE_WITHDRAW_CONTRACT_ADDRESS,
-  getRawAddressFromRoninAddress,
-  getRawSignature,
-  readNativeTokenBalance,
-  WITHDRAW_CONTRACT,
-} from '../../services';
-import { axieWithdrawToken } from '../../services/axie.service';
+import { FC, ReactElement, ReactNode, useRef } from 'react';
 import TrezorConnect, {
   EthereumAddress,
-  EthereumTransaction,
-  // DEVICE_EVENT,
-  // DEVICE
+  EthereumTransaction
 } from 'trezor-connect';
-import Web3 from 'web3';
+import {
+  AXIE_WITHDRAW_CONTRACT_ADDRESS,
+  getRawAddressFromRoninAddress, readNativeTokenBalance
+} from '../../services';
 
-import { ITransferSlpRequest, IConsolidateSlpRequest, TrezorContext, TrezorError } from '../Trezor';
-import { web3Read } from 'utils/web3';
 import { compareAddress } from 'utils/help';
+import { web3Read } from 'utils/web3';
+import { TrezorContext, TrezorError } from '../Trezor';
 
 const baseEthereumPath = "m/44'/60'/0'/0/";
 // const TARGET_WALLET = 'ronin:800645c2e37e2d513fbef4a411ac8a65d3a14040';
@@ -27,7 +19,6 @@ const TARGET_WALLET = 'ronin:69b4497e55389226e21326f201c11be694b53e18';
 const RON_FEE = 0.0000368;
 
 export const TrezorProvider: FC<any> = ({ children }: ReactNode | any): ReactElement => {
-  const [accounts, setAccount] = useState<EthereumAddress[]>([]);
   const accountsRef = useRef<Array<EthereumAddress>>([]);
 
   const getAccounts = async (options?: { disableCached?: boolean }): Promise<EthereumAddress[]> => {
@@ -108,7 +99,6 @@ export const TrezorProvider: FC<any> = ({ children }: ReactNode | any): ReactEle
     console.log('walletAddress', walletAddress, serializedPath);
 
     const rawAddress = getRawAddressFromRoninAddress(walletAddress);
-    let accessToken = '';
     // const axieWithdrawTokenRes = await axieWithdrawToken({
     //   items: [
     //     { amount: options?.total || 0, itemId: 'slp' }
