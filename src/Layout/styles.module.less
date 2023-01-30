@@ -12,6 +12,35 @@
   display: flex;
 }
 
+.headerLogo {
+  display: flex;
+  align-items: center;
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 25px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.headerCenter {
+  display: flex;
+  align-items: center;
+}
+
+.titleCenter {
+  margin: 0px 15px;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.headerSearch {
+  width: 140px !important;
+  height: 40px !important;
+  margin-left: 10px !important;
+}
+
 .buttonConnect {
   box-shadow: 0px 0px 10px #00000026 !important;
   border-radius: 999px !important;
@@ -38,6 +67,28 @@
   color: var(--orange-main) !important;
   transition-delay: 0.05s;
 }
+.modalStyle {
+  .ant-modal-header {
+    padding: 16px 24px;
+    color: rgba(0, 0, 0, 0.85);
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    border-radius: 2px 2px 0 0;
+    display: flex !important;
+    justify-content: space-around !important;
+  }
+}
+.ant-modal .ant-modal-title {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  word-wrap: break-word;
+  display: flex !important;
+  justify-content: space-around !important;
+}
+
 .connectWallet {
   margin: 10px !important;
 }

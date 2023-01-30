@@ -10,6 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@moralisweb3/next": "2.11.0",
     "@reduxjs/toolkit": "^1.6.2",
     "antd": "4.24.7",
