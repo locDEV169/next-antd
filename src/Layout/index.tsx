@@ -1,6 +1,7 @@
+import { SearchOutlined } from '@ant-design/icons';
 import { useAuthRequestChallengeEvm } from '@moralisweb3/next';
 import { InjectedConnector } from '@wagmi/core';
-import { Button, Layout, Modal, notification } from 'antd';
+import { Button, Input, Layout, Modal, notification, Select } from 'antd';
 import { useTrezor } from 'components/Trezor';
 import { useAppDispatch } from 'hooks';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -174,8 +175,28 @@ const MainLayout: FC = ({ children }) => {
     <Layout className={styles.root}>
       <Header className={styles.header}>
         <div className={styles.headerLeft}>
-          <div style={{ marginRight: '15px' }}>The LOGO</div>
-          <Link href="/profile">Profile</Link>
+          <div className={styles.headerLogo}>MITSUWA</div>
+        </div>
+        <div className={styles.headerCenter}>
+          <Link href="/">
+            <div className={styles.titleCenter}>Home</div>
+          </Link>
+          <Link href="/">
+            <div className={styles.titleCenter}>admin management</div>
+          </Link>
+          <Link href="/">
+            <div className={styles.titleCenter}>Environmental values</div>
+          </Link>
+          <Link href="/">
+            <div className={styles.titleCenter}>bid list</div>
+          </Link>
+          <Link href="/">
+            <div className={styles.titleCenter}>JCredit registration</div>
+          </Link>
+          <Link href="/">
+            <div className={styles.titleCenter}>My wallet</div>
+          </Link>
+          <Input placeholder="search" className={styles.headerSearch} prefix={<SearchOutlined />} />
         </div>
         <div className={styles.headerRight}>
           {data?.user ? (
@@ -187,6 +208,21 @@ const MainLayout: FC = ({ children }) => {
               Connect Wallet
             </Button>
           )}
+          <Select
+            defaultValue="EN"
+            style={{ width: 70, marginLeft: '10px' }}
+            bordered={false}
+            options={[
+              {
+                value: 'en',
+                label: 'EN',
+              },
+              {
+                value: 'jp',
+                label: 'JP',
+              },
+            ]}
+          />
         </div>
         <Modal
           title="Connect a Wallet"
@@ -195,6 +231,7 @@ const MainLayout: FC = ({ children }) => {
           onCancel={hideModal}
           cancelText="Cancel"
           footer={null}
+          className={styles.modalStyle}
         >
           <div className={styles.connectWallet}>
             <Button className={styles.buttonWallet} onClick={() => connectMetaMark()} style={{}}>
