@@ -175,7 +175,9 @@ const MainLayout: FC = ({ children }) => {
     <Layout className={styles.root}>
       <Header className={styles.header}>
         <div className={styles.headerLeft}>
-          <div className={styles.headerLogo}>MITSUWA</div>
+          <Link href="/">
+            <div className={styles.headerLogo}>MITSUWA</div>
+          </Link>
         </div>
         <div className={styles.headerCenter}>
           <Link href="/">
