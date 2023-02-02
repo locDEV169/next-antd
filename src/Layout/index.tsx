@@ -181,7 +181,7 @@ const MainLayout: FC = ({ children }) => {
           <Link href="/">
             <div className={styles.titleCenter}>Home</div>
           </Link>
-          <Link href="/">
+          <Link href="/admin-management">
             <div className={styles.titleCenter}>admin management</div>
           </Link>
           <Link href="/">
@@ -225,7 +225,7 @@ const MainLayout: FC = ({ children }) => {
           />
         </div>
         <Modal
-          title="Connect a Wallet"
+          title="Connect Your Wallet"
           open={openModal}
           onOk={hideModal}
           onCancel={hideModal}
