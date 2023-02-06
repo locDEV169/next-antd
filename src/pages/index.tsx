@@ -1,4 +1,3 @@
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { Card, Space, Tag } from 'antd';
 import clsx from 'clsx';
 import { Button } from 'components/Button';
@@ -15,8 +14,6 @@ const Home: NextPage = () => {
 
   const listCard = ['a', 'b', 'c', 'a', 'b', 'c'];
 
-  console.log(listCard.length);
-
   return (
     <div className={clsx(styles.main, 'container')}>
       <>
@@ -26,10 +23,10 @@ const Home: NextPage = () => {
           {helloMessage}
         </Space>
         <div className={styles.contentCard}>
-          {listCard.map((item, index) => (
+          {listCard.map((index) => (
             <div className={styles.card}>
               <Card
-                style={{ width: 500, margin: '20px' }}
+                style={{ width: 420, margin: '20px' }}
                 cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
                 // actions={[
                 //   <SettingOutlined key="setting" />,
@@ -82,6 +79,7 @@ const Home: NextPage = () => {
                     </Tag>
                   </div>
                 </div>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '10px' }}>View Detail</div>
               </Card>
             </div>
           ))}

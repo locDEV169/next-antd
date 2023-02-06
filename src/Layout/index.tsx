@@ -195,7 +195,7 @@ const MainLayout: FC = ({ children }) => {
           <Link href="/">
             <div className={styles.titleCenter}>JCredit registration</div>
           </Link>
-          <Link href="/">
+          <Link href="/my-wallet">
             <div className={styles.titleCenter}>My wallet</div>
           </Link>
           <Input placeholder="search" className={styles.headerSearch} prefix={<SearchOutlined />} />
