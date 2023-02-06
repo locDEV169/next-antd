@@ -1,7 +1,7 @@
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { useAuthRequestChallengeEvm } from '@moralisweb3/next';
 import { InjectedConnector } from '@wagmi/core';
-import { Button, Input, Layout, Modal, notification, Select } from 'antd';
+import { Button, Drawer, Input, Layout, Modal, notification, Select } from 'antd';
 import { useTrezor } from 'components/Trezor';
 import { useAppDispatch } from 'hooks';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -19,6 +19,7 @@ const { Header, Content, Footer } = Layout;
 const MainLayout: FC = ({ children }) => {
   const { data } = useSession();
   const [openModal, setOpenModal] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const { isConnected } = useAccount();
   const { connectAsync } = useConnect({ connector: new InjectedConnector() });
   const { disconnectAsync } = useDisconnect();
@@ -33,6 +34,14 @@ const MainLayout: FC = ({ children }) => {
 
   const hideModal = () => {
     setOpenModal(false);
+  };
+
+  const showDrawer = () => {
+    setOpenDrawer(true);
+  };
+
+  const onClose = () => {
+    setOpenDrawer(false);
   };
 
   const connectMetaMark = async () => {
@@ -202,7 +211,7 @@ const MainLayout: FC = ({ children }) => {
         </div>
         <div className={styles.headerRight}>
           {data?.user ? (
-            <Button type="primary" onClick={() => handleDisconnect()} className={styles.addressConnect}>
+            <Button type="primary" onClick={() => showDrawer()} className={styles.addressConnect}>
               {data.user.address}
             </Button>
           ) : (
@@ -291,6 +300,12 @@ const MainLayout: FC = ({ children }) => {
       </Header>
       <Content style={{ padding: '0 50px', minHeight: '85vh' }}>
         <div>{children}</div>
+        <Drawer title={false} placement="right" onClose={onClose} open={openDrawer}>
+          <div className={styles.user}>
+            <div>Connected</div>
+            <div className={styles.icon}><UserOutlined /></div>
+          </div>
+      </Drawer>
       </Content>
       <Footer style={{ textAlign: 'center' }}>NEXTJS ©2021 Created by DEVTEAM</Footer>
     </Layout>
