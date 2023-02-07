@@ -27,7 +27,8 @@ const MainLayout: FC = ({ children }) => {
   const { signMessageAsync } = useSignMessage();
   const { getAccounts, sendSignTx } = useTrezor();
   const dispatch = useAppDispatch();
-
+  console.log(data);
+  
   const showModal = () => {
     setOpenModal(true);
   };
@@ -303,7 +304,15 @@ const MainLayout: FC = ({ children }) => {
         <Drawer title={false} placement="right" onClose={onClose} open={openDrawer}>
           <div className={styles.user}>
             <div>Connected</div>
-            <div className={styles.icon}><UserOutlined /></div>
+            <div className={styles.icon}><UserOutlined  style={{ fontSize: '50px'}}/></div>
+          </div>
+          <div className={styles.information}>
+            <div>Wallet Connection:</div>
+            <div className={styles.address}>{data?.user?.address}</div>
+          </div>
+          <div className={styles.connectChain}>
+            <div>Connected chain:</div>
+            <div className={styles.address}>{data?.user?.chainId}</div>
           </div>
       </Drawer>
       </Content>
