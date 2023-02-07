@@ -1,14 +1,14 @@
 import { SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { useAuthRequestChallengeEvm } from '@moralisweb3/next';
 import { InjectedConnector } from '@wagmi/core';
-import { Button, Drawer, Input, Layout, Modal, notification, Select } from 'antd';
+import { Button, Drawer, Form, Input, Layout, Modal, notification, Select } from 'antd';
 import { useTrezor } from 'components/Trezor';
 import { useAppDispatch } from 'hooks';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { FC, useState } from 'react';
 import { web3Actions } from 'store/web3-slice';
-import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useNetwork, useSignMessage } from 'wagmi';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
@@ -27,8 +27,8 @@ const MainLayout: FC = ({ children }) => {
   const { signMessageAsync } = useSignMessage();
   const { getAccounts, sendSignTx } = useTrezor();
   const dispatch = useAppDispatch();
-  console.log(data);
-  
+  const { chains } = useNetwork();
+
   const showModal = () => {
     setOpenModal(true);
   };
@@ -181,6 +181,10 @@ const MainLayout: FC = ({ children }) => {
     signOut({ callbackUrl: '/' });
   };
 
+  const onFinish = (values: any) => {
+    console.log(values);
+  }
+
   return (
     <Layout className={styles.root}>
       <Header className={styles.header}>
@@ -303,18 +307,76 @@ const MainLayout: FC = ({ children }) => {
         <div>{children}</div>
         <Drawer title={false} placement="right" onClose={onClose} open={openDrawer}>
           <div className={styles.user}>
-            <div>Connected</div>
-            <div className={styles.icon}><UserOutlined  style={{ fontSize: '50px'}}/></div>
+            <div>
+              <div>Connected</div>
+              <Button onClick={() => handleDisconnect()}>Log Out</Button>
+            </div>
+            <div className={styles.icon}>
+              <UserOutlined style={{ fontSize: '50px' }} />
+            </div>
           </div>
           <div className={styles.information}>
             <div>Wallet Connection:</div>
             <div className={styles.address}>{data?.user?.address}</div>
           </div>
           <div className={styles.connectChain}>
-            <div>Connected chain:</div>
-            <div className={styles.address}>{data?.user?.chainId}</div>
+            <div>Connected Chain:</div>
+            <div className={styles.chain}>
+              {chains.map((chain) => (
+                <div>{chain.name}</div>
+              ))}
+            </div>
           </div>
-      </Drawer>
+          <div>
+            <Form
+              name="basic"
+              // labelCol={{ span: 8 }}
+              // wrapperCol={{ span: 16 }}
+              style={{ maxWidth: 600, margin: '10px 0' }}
+              initialValues={{ remember: true }}
+              onFinish={onFinish}
+              // onFinishFailed={onFinishFailed}
+              autoComplete="off"
+              className={styles.formLogin}
+            >
+              <Form.Item
+                label="Display Name"
+                name="name"
+                rules={[{ required: true, message: 'Please input your username!' }]}
+                className={styles.name}
+              >
+                <Input style={{ width: 200 }} />
+              </Form.Item>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
+                  { required: true, message: 'Please input your email!' },
+                ]}
+                className={styles.email}
+              >
+                <Input style={{ width: 200 }} />
+              </Form.Item>
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[{ required: true, message: 'Please input your password!' }]}
+                className={styles.password}
+              >
+                <Input.Password style={{ width: 200 }} />
+              </Form.Item>
+              <Form.Item wrapperCol={{ offset: 8, span: 16 }} style={{ margin: '20px 0' }}>
+                <Button type="primary" htmlType="submit">
+                  Enable 2 FA
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </Drawer>
       </Content>
       <Footer style={{ textAlign: 'center' }}>NEXTJS ©2021 Created by DEVTEAM</Footer>
     </Layout>
