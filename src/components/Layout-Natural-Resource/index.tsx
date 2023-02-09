@@ -1,5 +1,5 @@
 import { Layout, MenuProps, Tabs } from 'antd';
-import Area from 'pages/area/area';
+import Area from 'pages/area';
 import EnvironmentalValues from 'pages/environmental-values/environmental-values';
 import NaturalResource from 'pages/natural-resources/natural-resources';
 import Project from 'pages/project/project';
