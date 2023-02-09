@@ -1,7 +1,7 @@
 import { Layout, MenuProps, Tabs } from 'antd';
 import Area from 'pages/area';
 import EnvironmentalValues from 'pages/environmental-values/environmental-values';
-import NaturalResource from 'pages/natural-resources/natural-resources';
+import NaturalResource from 'pages/natural-resources';
 import Project from 'pages/project/project';
 import { FC } from 'react';
 import styles from './styles.module.less';
