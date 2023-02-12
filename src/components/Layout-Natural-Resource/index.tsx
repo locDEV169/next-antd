@@ -2,7 +2,7 @@ import { Layout, MenuProps, Tabs } from 'antd';
 import Area from 'pages/area';
 import EnvironmentalValues from 'pages/environmental-values/environmental-values';
 import NaturalResource from 'pages/natural-resources';
-import Project from 'pages/project/project';
+import Project from 'pages/project';
 import { FC } from 'react';
 import styles from './styles.module.less';
 
