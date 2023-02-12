@@ -1,6 +1,6 @@
 import { Layout, MenuProps, Tabs } from 'antd';
 import Area from 'pages/area';
-import EnvironmentalValues from 'pages/environmental-values/environmental-values';
+import EnvironmentalValues from 'pages/environmental-values';
 import NaturalResource from 'pages/natural-resources';
 import Project from 'pages/project';
 import { FC } from 'react';
