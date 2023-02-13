@@ -1,0 +1,130 @@
+.headerTitle {
+  margin: 20px 0;
+  background-color: #f2f5f7;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    .headerLeft {
+      display: flex;
+      align-items: center;
+      .title {
+        margin-left: 20px;
+        font-family: 'Ubuntu';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 31px;
+      }
+    }
+
+    .buttonNext {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      .buttonSubmit {
+        height: 40px;
+      }
+    }
+  }
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+
+  .leftContent {
+    margin-right: 40px;
+    flex-grow: 4;
+
+    .firstLine {
+      .ant-form-item-control {
+        margin-right: 20px;
+      }
+    }
+  }
+
+  .rightContent {
+    .formAdd {
+      .firstLine {
+        background: #f2f5f7;
+        border: 1px solid #d8d8d8;
+        border-radius: 5px;
+        padding: 15px;
+        margin: 0 0 25px;
+
+        .formProject {
+          // max-width: 650px;
+          width: 100%;
+        }
+      }
+
+      .enviromentValueDetail {
+        background: #f2f5f7;
+        border: 1px solid #d8d8d8;
+        border-radius: 5px;
+        padding: 15px;
+        margin: 0 0 25px;
+
+        .title {
+          font-family: 'Ubuntu';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 20px;
+          line-height: 30px;
+        }
+
+        .secondLine {
+          // max-width: 650px;
+          font-family: 'Ubuntu';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 18px;
+        }
+        .thirdLine,
+        .fourLine {
+          display: flex;
+          justify-content: space-between;
+          font-family: 'Ubuntu';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 18px;
+
+          .left,
+          .right {
+            flex-grow: 2;
+
+            input {
+              height: 40px;
+            }
+          }
+        }
+        .fiveLine {
+          display: flex;
+          justify-content: flex-end;
+          height: 40px;
+        }
+      }
+    }
+
+    .formButton {
+      display: flex;
+      justify-content: flex-end;
+
+      .buttonSubmit {
+        height: 40px;
+      }
+    }
+  }
+}
+.input100 {
+  width: 100%;
+}

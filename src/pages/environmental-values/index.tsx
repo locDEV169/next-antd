@@ -1,10 +1,10 @@
-import React from 'react';
-import type { NextPage } from 'next';
-import styles from './styles.module.less';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Popover } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import type { NextPage } from 'next';
 import Link from 'next/link';
+import React from 'react';
+import styles from './styles.module.less';
 
 interface DataType {
   key: React.Key;
@@ -121,7 +121,7 @@ const EnvironmentalValues: NextPage = () => {
 
   return <div><div className={styles.content}>
     <div className={styles.headerContent}>
-      <Link href="/">
+      <Link href="/environmental-values/add-environmental-value">
         <Button type="primary" className={styles.buttonAdd}>
           <PlusOutlined />
           Add
