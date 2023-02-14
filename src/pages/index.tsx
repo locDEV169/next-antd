@@ -52,8 +52,6 @@ const Home: NextPage = () => {
   }, []);
   console.log('getData', dataSource);
 
-  const listCard = ['a', 'b', 'c', 'a', 'b', 'c'];
-
   const contentList: Record<string, React.ReactNode> = {
     tab1: (
       <div className={styles.contentCard}>
