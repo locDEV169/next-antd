@@ -203,10 +203,10 @@ const MainLayout: FC = ({ children }) => {
           <Link href="/">
             <div className={styles.titleCenter}>Environmental values</div>
           </Link>
-          <Link href="/">
+          <Link href="/bid-list">
             <div className={styles.titleCenter}>bid list</div>
           </Link>
-          <Link href="/">
+          <Link href="/jcredit-registration">
             <div className={styles.titleCenter}>JCredit registration</div>
           </Link>
           <Link href="/my-wallet">

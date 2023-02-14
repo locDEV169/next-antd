@@ -1,10 +1,12 @@
-import { Card, Tag } from 'antd';
+import { Card, notification, Tag } from 'antd';
 import clsx from 'clsx';
 import LayoutNaturalResouce from 'components/Layout-Natural-Resource';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import type { NextPage } from 'next';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { getHelloMessage } from 'store/ducks/hello/slide';
+import { apiBaseUrl } from 'utils/constant';
+import api from './api';
 import styles from './styles.module.less';
 
 const { Meta } = Card;
@@ -24,17 +26,36 @@ const Home: NextPage = () => {
   const dispatch = useAppDispatch();
   const helloMessage = useAppSelector(getHelloMessage);
   const [activeTabKey, setActiveTabKey] = useState<string>('tab1');
+  const nftApi = 'https://63e9f445e0ac9368d6471f16.mockapi.io/api/v1/nft';
+  const [dataSource, setDataSource] = useState([]);
 
   const onTabChange = (key: string) => {
     setActiveTabKey(key);
   };
 
-  const listCard = ['a', 'b', 'c', 'a', 'b', 'c'];
+  const getData = async () => {
+    try {
+      const response = await api.get(`${nftApi}`, {});
+      const { data } = response;
+      setDataSource(data);
+    } catch (err) {
+      notification.error({
+        message: 'error.message',
+        description: 'error.description',
+      });
+      setDataSource([]);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+  console.log('getData', dataSource);
 
   const contentList: Record<string, React.ReactNode> = {
     tab1: (
       <div className={styles.contentCard}>
-        {listCard.map((item: any, index) => (
+        {dataSource.map((item: any, index) => (
           <div className={styles.card} key={index}>
             <Card
               style={{ width: 500, margin: 20 }}
@@ -48,10 +69,14 @@ const Home: NextPage = () => {
             >
               <Meta
                 // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                title="City XXX"
+                title={item.name}
               />
               <div className={styles.description}>
-                <div className={styles.title}>XX Forest</div>
+                <Meta
+                  // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                  title={item.enviromentValue}
+                  // description="This is the description"
+                />
                 <div style={{ display: 'flex' }}>
                   <Tag color="default" className={styles.tags} style={{ marginLeft: '0px' }}>
                     co2
@@ -66,7 +91,7 @@ const Home: NextPage = () => {
               </div>
               <Meta
                 // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                title="City XXX"
+                title={item.enviromentValue}
                 // description="This is the description"
               />
               <div className={styles.description}>
@@ -74,7 +99,7 @@ const Home: NextPage = () => {
               </div>
               <Meta
                 // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                title="City XXX"
+                title={item.enviromentValue}
               />
               <div className={styles.description}>
                 <div className={styles.title}>XX Forest</div>
@@ -98,8 +123,7 @@ const Home: NextPage = () => {
     ),
     tab2: (
       <div style={{ padding: '0px !important' }}>
-        <LayoutNaturalResouce>
-        </LayoutNaturalResouce>
+        <LayoutNaturalResouce></LayoutNaturalResouce>
       </div>
     ),
   };
