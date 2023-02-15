@@ -33,8 +33,9 @@ const contentList: Record<string, React.ReactNode> = {
       </div>
       <Image
         className={styles.image}
-        src="https://media.gettyimages.com/id/544182028/photo/saint-remy-june-1889-oil-on-canvas-29-x-36-1-4-inches-located-in-the-museum-of-modern-art-new.jpg?s=612x612&w=gi&k=20&c=MYpUlJaAmAektVF22LDZLOeclgA9sDpjqtLy__j4sH8="
+        src="https://img.freepik.com/free-vector/internet-network-warning-404-error-page-file-found-web-page-internet-error-page-issue-found-network-404-error-present-by-man-sleep-display_1150-55450.jpg?size=626&ext=jpg&ga=GA1.2.1004547509.1665458463&semt=ais"
         preview={false}
+        key={index}
       />
     </div>
   )),
@@ -59,7 +60,7 @@ const MyWallet: NextPage = () => {
         tabList={tabList}
         activeTabKey={activeTabKey}
         onTabChange={onTabChange}
-        tabBarExtraContent={<FilterOutlined style={{ fontSize: '20px', color: '#ffba00' }} />}
+        tabBarExtraContent={<FilterOutlined style={{ fontSize: '20px', color: '#5C913B' }} />}
       >
         <div className={styles.card}>{contentList[activeTabKey]}</div>
       </Card>

@@ -1,11 +1,8 @@
 import { Card, notification, Tag } from 'antd';
 import clsx from 'clsx';
 import LayoutNaturalResouce from 'components/Layout-Natural-Resource';
-import { useAppDispatch, useAppSelector } from 'hooks';
 import type { NextPage } from 'next';
-import { Fragment, useEffect, useState } from 'react';
-import { getHelloMessage } from 'store/ducks/hello/slide';
-import { apiBaseUrl } from 'utils/constant';
+import { useEffect, useState } from 'react';
 import api from './api';
 import styles from './styles.module.less';
 
@@ -23,8 +20,6 @@ const tabList = [
 ];
 
 const Home: NextPage = () => {
-  const dispatch = useAppDispatch();
-  const helloMessage = useAppSelector(getHelloMessage);
   const [activeTabKey, setActiveTabKey] = useState<string>('tab1');
   const nftApi = 'https://63e9f445e0ac9368d6471f16.mockapi.io/api/v1/nft';
   const [dataSource, setDataSource] = useState([]);
