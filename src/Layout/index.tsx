@@ -200,7 +200,7 @@ const MainLayout: FC = ({ children }) => {
           <Link href="/admin-management">
             <div className={styles.titleCenter}>admin management</div>
           </Link>
-          <Link href="/">
+          <Link href="/environmental-value">
             <div className={styles.titleCenter}>Environmental values</div>
           </Link>
           <Link href="/bid-list">
