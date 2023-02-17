@@ -1,7 +1,8 @@
-import { LeftOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, FormInstance, Input, Select, Upload } from 'antd';
+import { FullscreenOutlined, LeftOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Form, FormInstance, Input, Modal, Select, Upload } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload';
 import clsx from 'clsx';
+import Map from 'components/Map/map';
 import type { NextPage } from 'next';
 import { useRef, useState } from 'react';
 import styles from './styles.module.less';
@@ -19,6 +20,9 @@ const AddNaturalResouce: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const formRef = useRef<FormInstance>(null);
+  const [openModalMap, setOpenModalMap] = useState(false);
+  const keyGoogleMap = 'AIzaSyCKF7mt9OcEPcZ74cGfOGlyq_grEYlOeIk'
+  const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${keyGoogleMap}`
 
   const uploadButton = (
     <div>
@@ -55,6 +59,14 @@ const AddNaturalResouce: NextPage = () => {
       default:
         break;
     }
+  };
+
+  const onIconClick = () => {
+    setOpenModalMap(true);
+  };
+
+  const handleCancel = () => {
+    setOpenModalMap(false);
   };
 
   return (
@@ -145,25 +157,6 @@ const AddNaturalResouce: NextPage = () => {
                   <Input placeholder="Enter the Natural Resource Name" />
                 </Form.Item>
                 <Form.Item
-                  label="Royalty Fee"
-                  name="royaltyFee"
-                  rules={[{ required: true, message: 'Please input your Royalty Fee!' }]}
-                  className={clsx(styles.right)}
-                >
-                  <Input placeholder="Royalty fee (%) " />
-                </Form.Item>
-              </div>
-              <div className={styles.fourLine}>
-                <Form.Item
-                  label="Latitude"
-                  name="latitude"
-                  rules={[{ required: true, message: 'Please input your Latitude!' }]}
-                  className={clsx(styles.left, styles.formItem)}
-                  style={{ marginRight: 40 }}
-                >
-                  <Input placeholder="Enter the Latitude" />
-                </Form.Item>
-                <Form.Item
                   label="Royalty fee receiver wallet"
                   name="royaltyFeeReceiverWallet"
                   rules={[{ required: true, message: 'Please input your Royalty fee receiver wallet!' }]}
@@ -172,26 +165,38 @@ const AddNaturalResouce: NextPage = () => {
                   <Input placeholder="Enter the Royalty fee receiver wallet " />
                 </Form.Item>
               </div>
-              <div className={styles.fiveLine}>
-                <Form.Item
-                  label="Longitude"
-                  name="longitude"
-                  rules={[{ required: true, message: 'Please input your Longitude!' }]}
-                  className={clsx(styles.left, styles.formItem)}
-                  style={{ marginRight: 40 }}
-                >
-                  <Input placeholder="Enter the Longitude" />
-                </Form.Item>
+              <div className={styles.fourLine}>
+                <div className={clsx(styles.left)}>
+                  <Form.Item
+                    label="Latitude"
+                    name="latitude"
+                    rules={[{ required: true, message: 'Please input your Latitude!' }]}
+                    className={clsx(styles.formItem)}
+                  >
+                    <Input placeholder="Enter the Latitude" style={{ height: 40 }} />
+                  </Form.Item>
+                  <Form.Item
+                    label="Longitude"
+                    name="longitude"
+                    rules={[{ required: true, message: 'Please input your Longitude!' }]}
+                    className={clsx(styles.formItem)}
+                  >
+                    <Input placeholder="Enter the Longitude" style={{ height: 40 }} />
+                  </Form.Item>
+                </div>
                 <Form.Item
                   label="Address"
                   name="address"
                   rules={[{ required: true, message: 'Please input your Address!' }]}
                   className={clsx(styles.right)}
                 >
-                  <Input placeholder="Enter the Address " />
+                  <Input
+                    placeholder="Enter the Address "
+                    style={{ height: 40 }}
+                    suffix={<FullscreenOutlined onClick={() => onIconClick()} />}
+                  />
                 </Form.Item>
               </div>
-
               <Form.Item
                 label="Resource's Description"
                 name="resourceDescription"
@@ -264,6 +269,22 @@ const AddNaturalResouce: NextPage = () => {
               </div>
             </Form.Item>
           </Form>
+          <Modal
+            title="Map"
+            open={openModalMap}
+            // onOk={handleOk}
+            // confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+            footer={false}
+            width={750}
+          >
+            <Map
+              googleMapURL={googleMapURL}
+              loadingElement={<div style={{ height: `60%` }} />}
+              containerElement={<div style={{ height: `60vh`, margin: `auto` }} />}
+              mapElement={<div style={{ height: `100%` }} />}
+            />
+          </Modal>
         </div>
       </div>
     </div>
