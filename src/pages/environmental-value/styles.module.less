@@ -87,6 +87,82 @@
     }
   }
 }
+.soldValue {
+  .card {
+    display: flex;
+    flex-direction: column;
+
+    .headerTitle {
+      background: #f2f5f7;
+      border-radius: 10px;
+      font-family: 'Ubuntu';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 31px;
+      padding: 20px 10px;
+    }
+    .listImg {
+      display: flex;
+      //   justify-content: space-between;
+      margin: 10px 0;
+      padding: 10px;
+      background: #f2f5f7;
+    }
+    .contentImage {
+      width: 450px;
+      // position: relative;
+      margin: 10px 20px;
+      .image {
+        width: 450px;
+        height: 260px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .headerImg {
+        position: absolute;
+        display: block;
+        .textImage {
+          position: relative;
+          // top: 30px !important;
+          margin-top: 20px;
+          margin-left: 10px;
+          float: left;
+          z-index: 999;
+          text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        .description {
+          position: relative;
+          z-index: 999;
+          float: right;
+          margin: 10px 0 0 50px;
+          width: 180px;
+          height: 220px;
+          background-color: rgba(218, 227, 232, 0.5);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .titleDescription {
+            margin: 20px 0 10px;
+          }
+        }
+      }
+      &:hover {
+        .image {
+          opacity: 0.3;
+        }
+        .headerImg {
+          .textImage,
+          .description {
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+  }
+}
 .contentStyle {
   height: '160px';
   color: '#fff';

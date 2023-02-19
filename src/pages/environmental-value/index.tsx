@@ -1,7 +1,8 @@
-import { FilterOutlined } from '@ant-design/icons';
+import { EditOutlined, FilterOutlined, ImportOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Image, Input, Modal } from 'antd';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import styles from './styles.module.less';
 
@@ -23,6 +24,18 @@ const Profile: NextPage = () => {
   const [activeTabKey, setActiveTabKey] = useState<string>('tab1');
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const titleModal = (
+    <div style={{ display: 'flex' }}>
+      <div>Furusato Mint NFT</div>
+      <div>
+        <EditOutlined style={{ fontSize: 20, margin: '0px 15px', color: '#C2D1D9' }} />
+      </div>
+      <div>
+        <ImportOutlined rotate={-90} style={{ fontSize: 20, color: '#C2D1D9' }} />
+      </div>
+    </div>
+  );
 
   const onTabChange = (key: string) => {
     setActiveTabKey(key);
@@ -79,7 +92,7 @@ const Profile: NextPage = () => {
           </div>
         ))}
         <Modal
-          title="Furusato Mint NFT"
+          title={titleModal}
           open={open}
           onOk={handleOk}
           confirmLoading={confirmLoading}
@@ -197,7 +210,39 @@ const Profile: NextPage = () => {
         </Modal>
       </div>
     ),
-    tab2: <div style={{ padding: '0px !important' }}>sold NFT</div>,
+    tab2: (
+      <div style={{ padding: '0px !important' }}>
+        <div className={clsx(styles.soldValue)}>
+          {listCard.map((index) => (
+            <div key={index} className={styles.card}>
+              <div className={clsx(styles.headerTitle)}>Da Nang City</div>
+              <div className={clsx(styles.listImg)}>
+                {listImg.map((index) => (
+                  <Link href={'/sold-nft/view-detail'}>
+                  <div className={styles.contentImage} key={index}>
+                    <div className={styles.headerImg}>
+                      <div className={styles.textImage}>Ba Den Forest of DaNang city</div>
+                      <div className={styles.description}>
+                        <div className={styles.titleDescription}>Environmental value:</div>
+                        <div style={{ margin: '10px 0 10px' }}>CO2</div>
+                        <div style={{ margin: '5px 0 0' }}>Estimated value: 4000t</div>
+                        <div style={{ margin: '5px 0 0' }}>Remaining value: 100t</div>
+                      </div>
+                    </div>
+                    <Image
+                      className={styles.image}
+                      src="https://img.freepik.com/free-vector/internet-network-warning-404-error-page-file-found-web-page-internet-error-page-issue-found-network-404-error-present-by-man-sleep-display_1150-55450.jpg?size=626&ext=jpg&ga=GA1.2.1004547509.1665458463&semt=ais"
+                      preview={false}
+                    />
+                  </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
   };
 
   return (
