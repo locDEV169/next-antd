@@ -6,13 +6,14 @@ import {
   PlusOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, Form, FormInstance, Input, Select, Table, Upload, UploadProps } from 'antd';
+import { Avatar, Button, Form, FormInstance, Input, notification, Select, Table, Upload, UploadProps } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import { ColumnsType, TableProps } from 'antd/lib/table';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
-import React, { useRef, useState } from 'react';
+import api from 'pages/api';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles.module.less';
 
 interface DataType {
@@ -37,6 +38,28 @@ const AdminManagement: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const formRef = useRef<FormInstance>(null);
+  const [dataSource, setDataSource] = useState<DataType[]>([]);
+  // const USER_API = process.env.USER_API;
+  const USER_API = 'http://localhost:5000/users';
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`${USER_API}`, {});
+      const { data } = response;
+      setDataSource(data);
+    } catch (err) {
+      notification.error({
+        message: 'error.message',
+        description: 'error.description',
+      });
+      setDataSource([]);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+  console.log('getData', dataSource);
 
   const uploadButton = (
     <div>
@@ -73,6 +96,7 @@ const AdminManagement: NextPage = () => {
     {
       title: 'Name',
       dataIndex: 'name',
+      key: 'name',
       filters: [
         {
           text: 'Esther Howard',
@@ -96,16 +120,19 @@ const AdminManagement: NextPage = () => {
     },
     {
       title: 'Wallet Address',
-      dataIndex: 'walletAddress',
+      dataIndex: 'wallet_Address',
+      key: 'wallet_Address',
       // sorter: (a, b) => a.age - b.age,
     },
     {
       title: '',
       dataIndex: 'email',
+      key: 'email',
     },
     {
       title: 'Phone Number',
       dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
       filters: [
         {
           text: 'London',
@@ -130,44 +157,6 @@ const AdminManagement: NextPage = () => {
           <DeleteOutlined style={{ color: '#FC5640' }} onClick={() => showModalRemove()} />
         </div>
       ),
-    },
-  ];
-
-  const data: DataType[] = [
-    {
-      key: '1',
-      name: 'Esther Howard',
-      walletAddress: '0x8ce7g9kl6hsk9jsh66sa99sa',
-      email: 'kenzi.lawson@example.com',
-      phoneNumber: '(405) 555-0128',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      walletAddress: '0x8ce7g9kl6hsk9jsh66sa99sa',
-      email: 'kenzi.lawson@example.com',
-      phoneNumber: '(405) 555-0128',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      walletAddress: '0x8ce7g9kl6hsk9jsh66sa99sa',
-      email: 'kenzi.lawson@example.com',
-      phoneNumber: '(405) 555-0128',
-    },
-    {
-      key: '4',
-      name: 'Esther Howard',
-      walletAddress: '0x8ce7g9kl6hsk9jsh66sa99sa',
-      email: 'kenzi.lawson@example.com',
-      phoneNumber: '(405) 555-0128',
-    },
-    {
-      key: '5',
-      name: 'Esther Howard',
-      walletAddress: '0x8ce7g9kl6hsk9jsh66sa99sa',
-      email: 'kenzi.lawson@example.com',
-      phoneNumber: '(405) 555-0128',
     },
   ];
 
@@ -226,9 +215,9 @@ const AdminManagement: NextPage = () => {
       </div>
       <div className={styles.content}>
         <div className={styles.contentTitle}>Admin List</div>
-        <div className={styles.contentTotal}>{data.length} Admins in total</div>
+        <div className={styles.contentTotal}>{dataSource.length > 0 ? dataSource.length : 0} Admins in total</div>
         <div className={styles.table}>
-          <Table columns={columns} dataSource={data} onChange={onChange} pagination={false} />
+          <Table columns={columns} dataSource={dataSource} onChange={onChange} pagination={false} rowKey="id" />
         </div>
       </div>
       <Modal title="Add a New Admin" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={false}>
@@ -353,7 +342,7 @@ const AdminManagement: NextPage = () => {
           >
             Cancel
           </Button>
-          <Button htmlType="submit" style={{background: '#FC5640'}} className={clsx(styles.buttonSubmit)}>
+          <Button htmlType="submit" style={{ background: '#FC5640' }} className={clsx(styles.buttonSubmit)}>
             Yes, remove
           </Button>
         </div>
