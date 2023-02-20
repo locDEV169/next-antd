@@ -3,6 +3,7 @@ import { Button, Form, FormInstance, Input, Select, Upload } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import styles from './styles.module.less';
 
@@ -19,6 +20,7 @@ const AddArea: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const formRef = useRef<FormInstance>(null);
+  const router = useRouter();
 
   const uploadButton = (
     <div>
@@ -59,14 +61,14 @@ const AddArea: NextPage = () => {
 
   const onFinish = (values: any) => {
     console.log(values);
-  }
+  };
 
   return (
     <div>
       <div className={styles.headerTitle}>
         <div className={styles.headerLeft}>
           <div>
-            <LeftOutlined style={{ fontSize: 20 }} />
+            <LeftOutlined style={{ fontSize: 20 }} onClick={() => router.back()} />
           </div>
           <div className={styles.title}>Add New Area</div>
         </div>

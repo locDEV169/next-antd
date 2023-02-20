@@ -5,6 +5,7 @@ import { UploadFile } from 'antd/lib/upload/interface';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Fragment, useRef, useState } from 'react';
 import styles from './styles.module.less';
 
@@ -20,6 +21,7 @@ const AddEnviromnentalValue: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const formRef = useRef<FormInstance>(null);
+  const router = useRouter()
 
   const uploadButton = (
     <div>
@@ -63,7 +65,7 @@ const AddEnviromnentalValue: NextPage = () => {
       <div className={styles.headerTitle}>
         <div className={styles.headerContent}>
           <div className={clsx(styles.headerLeft)}>
-            <LeftOutlined style={{ fontSize: 20 }} />
+            <LeftOutlined style={{ fontSize: 20 }} onClick={() => router.back()}/>
             <div className={styles.title}>Add New Environmental Values</div>
           </div>
           <div className={clsx(styles.buttonNext)}>

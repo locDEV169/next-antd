@@ -4,6 +4,7 @@ import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upl
 import clsx from 'clsx';
 import Map from 'components/Map/map';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import styles from './styles.module.less';
 
@@ -23,6 +24,7 @@ const AddNaturalResouce: NextPage = () => {
   const [openModalMap, setOpenModalMap] = useState(false);
   const keyGoogleMap = 'AIzaSyCKF7mt9OcEPcZ74cGfOGlyq_grEYlOeIk'
   const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${keyGoogleMap}`
+  const router = useRouter()
 
   const uploadButton = (
     <div>
@@ -74,7 +76,7 @@ const AddNaturalResouce: NextPage = () => {
       <div className={styles.headerTitle}>
         <div className={styles.headerLeft}>
           <div>
-            <LeftOutlined style={{ fontSize: 20 }} />
+            <LeftOutlined style={{ fontSize: 20 }} onClick={() => router.back()}/>
           </div>
           <div className={styles.title}>Add New Natural Resource</div>
         </div>
