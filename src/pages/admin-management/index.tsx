@@ -217,7 +217,13 @@ const AdminManagement: NextPage = () => {
         <div className={styles.contentTitle}>Admin List</div>
         <div className={styles.contentTotal}>{dataSource.length > 0 ? dataSource.length : 0} Admins in total</div>
         <div className={styles.table}>
-          <Table columns={columns} dataSource={dataSource} onChange={onChange} pagination={false} rowKey="id" />
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            onChange={onChange}
+            rowKey="id"
+            scroll={{ y: `calc(100vh - 550px)` }}
+          />
         </div>
       </div>
       <Modal title="Add a New Admin" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={false}>

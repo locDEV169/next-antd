@@ -1,21 +1,54 @@
-import React from 'react';
-import type { NextPage } from 'next';
-import styles from './styles.module.less';
-import clsx from 'clsx';
+import { Button, notification } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
-import { Button } from 'antd';
+import clsx from 'clsx';
+import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import api from 'pages/api';
+import React, { useEffect, useState } from 'react';
+import styles from './styles.module.less';
 
 interface DataType {
+  id?: number;
   key: React.Key;
+  name?: string;
+  avatar?: string;
   corporationInformation?: string;
   area?: string;
   naturalResourceType?: string;
   status?: string;
+  walletAddress?: string;
+  emailAddress?: string;
+  phoneNumber?: string;
+  price?: number;
+  royaltyFee?: number;
+  limitPerWallet?: number;
+  bidQuantity?: number;
 }
 
 const BIDList: NextPage = () => {
-  const router = useRouter()
+  const router = useRouter();
+  const [dataSource, setDataSource] = useState<DataType[]>([]);
+  // const USER_API = process.env.USER_API;
+  const BID_API = 'http://localhost:5000/bids';
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`${BID_API}`, {});
+      const { data } = response;
+      setDataSource(data);
+    } catch (err) {
+      notification.error({
+        message: 'error message',
+        description: 'error description',
+      });
+      setDataSource([]);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+  console.log('getData', dataSource);
 
   const columns: ColumnsType<DataType> = [
     {
@@ -39,7 +72,7 @@ const BIDList: NextPage = () => {
       dataIndex: 'status',
       render: (name) => (
         <div className={styles.status}>
-          <Button className={clsx(styles.borderStatus, styles.height40)} disabled>
+          <Button type="ghost" className={clsx(styles.borderStatus, styles.height40)} disabled>
             {`${name}`}
           </Button>
         </div>
@@ -50,12 +83,20 @@ const BIDList: NextPage = () => {
       dataIndex: 'popover',
       // key: 'x',
       width: '300px',
-      render: (_text, _record) => (
+      render: (_text, record) => (
         <div className={styles.buttonAction} style={{ cursor: 'pointer', display: 'flex' }}>
-          <Button type="ghost" className={clsx(styles.buttonViewDetail, styles.height40, styles.borderRadius5)}>
+          <Button
+            type="ghost"
+            className={clsx(styles.buttonViewDetail, styles.height40, styles.borderRadius5)}
+            onClick={() => onViewDetail(record)}
+          >
             View Detail
           </Button>
-          <Button type="ghost" className={clsx(styles.buttonReject, styles.height40, styles.borderRadius5)}>
+          <Button
+            type="ghost"
+            className={clsx(styles.buttonReject, styles.height40, styles.borderRadius5)}
+            onClick={() => onReject()}
+          >
             Reject
           </Button>
         </div>
@@ -63,94 +104,18 @@ const BIDList: NextPage = () => {
     },
   ];
 
-  const data: DataType[] = [
-    {
-      key: '1',
-      status: 'open',
-      corporationInformation: 'Cameron Williamson',
-      area: 'Toledo City',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '2',
-      status: 'open',
-      corporationInformation: 'Cameron Williamson',
-      area: 'Fairfield City',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '3',
-      status: 'open',
-      corporationInformation: 'Jenny Wilson',
-      area: 'Naperville City',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '4',
-      status: 'open',
-      corporationInformation: 'Savannah Nguyen',
-      area: 'Toledo City',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '5',
-      status: 'open',
-      corporationInformation: 'Esther Howard',
-      area: 'Fairfield City',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '6',
-      status: 'open',
-      corporationInformation: 'Dianne Russell',
-      area: 'Naperville City',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '7',
-      status: 'open',
-      corporationInformation: 'Marvin McKinney',
-      area: 'Austin City',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '8',
-      status: 'open',
-      corporationInformation: 'Annette Black',
-      area: 'Toledo City',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '9',
-      status: 'open',
-      corporationInformation: 'Marvin McKinney',
-      area: 'Toledo City',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '10',
-      status: 'open',
-      corporationInformation: 'Annette Black',
-      area: 'Ha Noi City ',
-      naturalResourceType: 'Forest',
-    },
-    {
-      key: '11',
-      status: 'open',
-      corporationInformation: 'Ronald Richards',
-      area: 'Da Nang City',
-      naturalResourceType: 'Forest',
-    },
-  ];
-
   const onTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
   };
 
-  const onRowClick = () => {
-    console.log('asd');
-    router.push('/bid-list/view-detail')
-  }
+  const onViewDetail = (record: DataType) => {
+    console.log('onViewDetail', record.id);
+    router.push(`/bid-list/view-detail/${record.id}`);
+  };
+
+  const onReject = () => {
+    console.log('reject');
+  };
 
   return (
     <div>
@@ -159,13 +124,17 @@ const BIDList: NextPage = () => {
         <div className={styles.table}>
           <Table
             columns={columns}
-            dataSource={data}
+            dataSource={dataSource}
             onChange={onTableChange}
-            onRow={(_record, _rowIndex) => {
-              return {
-                onClick: (_event) => {onRowClick()}, // click row
-              };
-            }}
+            rowKey="id"
+            // onRow={(record, _rowIndex) => {
+            //   return {
+            //     onClick: (_event) => {
+            //       onRowClick(record);
+            //     }, // click row
+            //   };
+            // }}
+            scroll={{ y: `calc(100vh - 400px)` }}
           />
         </div>
       </div>

@@ -1,8 +1,10 @@
-import { Button } from 'antd';
+import { Button, notification } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
 import clsx from 'clsx';
+import moment from "moment";
 import type { NextPage } from 'next';
-import React from 'react';
+import api from 'pages/api';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.less';
 
 interface DataType {
@@ -15,12 +17,32 @@ interface DataType {
 }
 
 const JCreditRegistration: NextPage = () => {
-  const dateNow = new Date().toISOString().slice(0, 10);
+  const [dataSource, setDataSource] = useState<DataType[]>([]);
+  // const USER_API = process.env.USER_API;
+  const BID_API = 'http://localhost:5000/credit_register';
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`${BID_API}`, {});
+      const { data } = response;
+      setDataSource(data);
+    } catch (err) {
+      notification.error({
+        message: 'error message',
+        description: 'error description',
+      });
+      setDataSource([]);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const columns: ColumnsType<DataType> = [
     {
       title: 'Investor',
-      dataIndex: 'investor',
+      dataIndex: 'investorName',
       width: '250px',
       render: (name) => <div className={styles.investor}>{name}</div>,
     },
@@ -31,22 +53,20 @@ const JCreditRegistration: NextPage = () => {
     },
     {
       title: 'JCredit.No',
-      dataIndex: 'jCreditNo',
+      dataIndex: 'corporationInfo',
       render: (name) => <div className={styles.jCreditNo}>{`${name}`}</div>,
     },
     {
       title: 'Date',
-      dataIndex: 'date',
-      render: (_name) => <div className={styles.date}>{`${dateNow}`}</div>,
+      dataIndex: 'createdAt',
+      render: (time) => <div className={styles.date}>{formatDate(time)}</div>,
     },
     {
       title: 'Status',
       dataIndex: 'status',
       render: (name) => (
         <div className={styles.status}>
-          <Button className={clsx(styles.borderStatus, styles.height40)} disabled>
-          {`${name}`}
-          </Button>
+          <Button className={clsx(styles.borderStatus, styles.height40)} disabled>{`${name}`}</Button>
         </div>
       ),
     },
@@ -68,88 +88,13 @@ const JCreditRegistration: NextPage = () => {
     },
   ];
 
-  const data: DataType[] = [
-    {
-      key: '1',
-      investor: 'Cameron Williamson',
-      nft: 'ABC',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '2',
-      investor: 'Jenny Wilson',
-      nft: 'nft 2',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '3',
-      investor: 'Savannah Nguyen',
-      nft: 'nft 3',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '4',
-      investor: 'Esther Howard',
-      nft: 'nft 4',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '5',
-      investor: 'Dianne Russell',
-      nft: 'nft 5',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '6',
-      investor: 'Esther Howard',
-      nft: 'nft 6',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '7',
-      investor: 'Dianne Russell',
-      nft: 'nft 7',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '8',
-      investor: 'Marvin McKinney',
-      nft: 'nft 8',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '9',
-      investor: 'Marvin McKinney',
-      nft: 'nft 9',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '10',
-      investor: 'Marvin McKinney',
-      nft: 'nft 10',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-    {
-      key: '11',
-      investor: 'Dianne Russell',
-      nft: 'nft 11',
-      jCreditNo: '123...765 - 324',
-      status: 'open',
-    },
-  ];
-
   const onTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
+  };
+
+  const formatDate = (value: string) => {
+    const date = moment(value).format("DD/MM/YYYY");
+    return date
   };
 
   return (
@@ -157,7 +102,7 @@ const JCreditRegistration: NextPage = () => {
       <div className={clsx(styles.title)}>Tokyo City</div>
       <div className={styles.content}>
         <div className={styles.table}>
-          <Table columns={columns} dataSource={data} onChange={onTableChange} />
+          <Table columns={columns} dataSource={dataSource} onChange={onTableChange} rowKey="id" />
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@ const Home: NextPage = () => {
   const [activeTabKey, setActiveTabKey] = useState<string>('tab1');
   // const nftApi = 'https://63e9f445e0ac9368d6471f16.mockapi.io/api/v1/nft';
   // const NFT_API = process.env.NFT_API
-  const NFT_API = "http://localhost:5000/NFT"
+  const NFT_API = "http://localhost:5000/tokens"
   const [dataSource, setDataSource] = useState([]);
 
   const onTabChange = (key: string) => {
@@ -56,7 +56,7 @@ const Home: NextPage = () => {
           <div className={styles.card} key={index}>
             <Card
               style={{ width: 500, margin: 20 }}
-              cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
+              cover={<img alt="example" src={item.imageUrl} width={500} height={300} />}
               // actions={[
               //   <SettingOutlined key="setting" />,
               //   <EditOutlined key="edit" />,
