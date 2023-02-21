@@ -1,0 +1,121 @@
+.headerTitle {
+  margin: 20px 0;
+  background-color: #f2f5f7;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    .headerLeft {
+      display: flex;
+      align-items: center;
+      .title {
+        margin-left: 20px;
+        font-family: 'Ubuntu';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 31px;
+      }
+    }
+
+    .buttonNext {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      .buttonSubmit {
+        height: 40px;
+      }
+    }
+  }
+}
+.content {
+  margin: 20px 0;
+  background-color: #f2f5f7;
+  display: flex;
+  flex-direction: row;
+  padding: 40px 30px;
+  .left {
+    flex-grow: 1;
+    image {
+      max-width: 450px !important;
+      width: 100%;
+    }
+  }
+  .right {
+    flex-grow: 3;
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 18px;
+    .title {
+      font-family: 'Ubuntu';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 31px;
+      color: #424b5a;
+    }
+    .firstLine,
+    .secondLine,
+    .thirdLine,
+    .fourLine,
+    .fiveLine {
+      display: flex;
+      flex-direction: row;
+      margin: 15px 0px;
+    }
+    .fourLine {
+      display: flex;
+      align-items: center;
+      .bid {
+        background-color: #c2d1d9;
+        max-width: 150px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.buttonAction {
+  display: flex;
+  justify-content: flex-end;
+  .buttonDanger {
+    border: 1px solid #fc5640;
+    color: #fc5640;
+  }
+  .buttonSubmit {
+    width: 150px;
+    height: 40px;
+  }
+}
+.progress {
+  background-color: #f2f5f7;
+  padding: 50px;
+  margin: 50px 0px;
+}
+.modal {
+  display: flex;
+  flex-direction: column;
+  .buttonModal {
+    display: flex;
+    justify-content: center;
+    .buttonSubmit {
+      width: 150px;
+      height: 40px;
+    }
+    .buttonDanger {
+      border: 1px solid #fc5640;
+      color: #fc5640;
+    }
+  }
+}

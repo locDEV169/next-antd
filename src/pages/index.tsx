@@ -21,7 +21,9 @@ const tabList = [
 
 const Home: NextPage = () => {
   const [activeTabKey, setActiveTabKey] = useState<string>('tab1');
-  const nftApi = 'https://63e9f445e0ac9368d6471f16.mockapi.io/api/v1/nft';
+  // const nftApi = 'https://63e9f445e0ac9368d6471f16.mockapi.io/api/v1/nft';
+  // const NFT_API = process.env.NFT_API
+  const NFT_API = "http://localhost:5000/NFT"
   const [dataSource, setDataSource] = useState([]);
 
   const onTabChange = (key: string) => {
@@ -30,7 +32,7 @@ const Home: NextPage = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`${nftApi}`, {});
+      const response = await api.get(`${NFT_API}`, {});
       const { data } = response;
       setDataSource(data);
     } catch (err) {

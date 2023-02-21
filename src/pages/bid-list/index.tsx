@@ -4,6 +4,7 @@ import styles from './styles.module.less';
 import clsx from 'clsx';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
 import { Button } from 'antd';
+import { useRouter } from 'next/router';
 
 interface DataType {
   key: React.Key;
@@ -14,6 +15,8 @@ interface DataType {
 }
 
 const BIDList: NextPage = () => {
+  const router = useRouter()
+
   const columns: ColumnsType<DataType> = [
     {
       title: 'Corporation Information',
@@ -144,12 +147,26 @@ const BIDList: NextPage = () => {
     console.log('params', pagination, filters, sorter, extra);
   };
 
+  const onRowClick = () => {
+    console.log('asd');
+    router.push('/bid-list/view-detail')
+  }
+
   return (
     <div>
       <div className={clsx(styles.title)}>Bid Management</div>
       <div className={styles.content}>
         <div className={styles.table}>
-          <Table columns={columns} dataSource={data} onChange={onTableChange} />
+          <Table
+            columns={columns}
+            dataSource={data}
+            onChange={onTableChange}
+            onRow={(_record, _rowIndex) => {
+              return {
+                onClick: (_event) => {onRowClick()}, // click row
+              };
+            }}
+          />
         </div>
       </div>
     </div>
