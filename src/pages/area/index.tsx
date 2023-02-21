@@ -1,9 +1,10 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Popover } from 'antd';
+import { Button, notification, Popover } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import api from 'pages/api';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.less';
 
 interface DataType {
@@ -12,10 +13,40 @@ interface DataType {
   area?: string;
   discordLink?: string;
   description?: string;
-  contribution?: string;
+  customData?: string;
+  name?: string;
+  origanization: Origanization;
+}
+interface Origanization {
+  description?: string;
+  discordUrl?: string;
+  name?: string;
+  royaltyReceiver?: string;
 }
 
 const Area: NextPage = () => {
+  const [dataSource, setDataSource] = useState<DataType[]>([]);
+  const BID_API = 'http://localhost:5000/area';
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`${BID_API}`, {});
+      const { data } = response;
+      setDataSource(data);
+    } catch (err) {
+      notification.error({
+        message: 'error message',
+        description: 'error description',
+      });
+      setDataSource([]);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+  console.log(dataSource);
+
   const content = (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <EditOutlined style={{ color: '#0A04F5', marginBottom: '10px' }} />
@@ -38,14 +69,14 @@ const Area: NextPage = () => {
     },
     {
       title: 'Area',
-      dataIndex: 'area',
+      dataIndex: 'name',
       // width: '120px',
       render: (name) => <div className={styles.area}>{name}</div>,
     },
     {
       title: 'Discord Link',
-      dataIndex: 'discordLink',
-      render: (name) => <div className={styles.discordLink}>{name}</div>,
+      dataIndex: 'origanization',
+      render: (item: Origanization) => <div className={styles.discordLink}>{item.discordUrl}</div>,
     },
     {
       title: 'Description',
@@ -53,7 +84,7 @@ const Area: NextPage = () => {
     },
     {
       title: 'Contribution',
-      dataIndex: 'contribution',
+      dataIndex: 'customData',
     },
     {
       title: '',
@@ -69,51 +100,6 @@ const Area: NextPage = () => {
     },
   ];
 
-  const data: DataType[] = [
-    {
-      key: '1',
-      area: 'Da Nang City',
-      discordLink: 'https://chrome.google.com/webstore/detail/authenticator',
-      description:
-        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.... ',
-      contribution:
-        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.... ',
-    },
-    {
-      key: '2',
-      area: 'Da Nang City',
-      discordLink: 'https://chrome.google.com/webstore/detail/authenticator',
-      contribution:
-        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.... ',
-    },
-    {
-      key: '3',
-      area: 'Da Nang City',
-      discordLink: 'https://chrome.google.com/webstore/detail/authenticator',
-      description:
-        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.... ',
-      contribution:
-        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.... ',
-    },
-    {
-      key: '4',
-      area: 'Da Nang City',
-      discordLink: 'https://chrome.google.com/webstore/detail/authenticator',
-      description:
-        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.... ',
-      contribution:
-        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.... ',
-    },
-    {
-      key: '5',
-      area: 'Da Nang City',
-      discordLink: 'https://chrome.google.com/webstore/detail/authenticator',
-      description:
-        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.... ',
-      contribution:
-        'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.... ',
-    },
-  ];
   const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
   };
@@ -122,7 +108,7 @@ const Area: NextPage = () => {
     <div>
       <div className={styles.content}>
         <div className={styles.headerContent}>
-          <div className={styles.contentTotal}>{data.length} Admins in total</div>
+          <div className={styles.contentTotal}>{dataSource.length} Areas in total</div>
           <Link href="/area/add-area">
             <Button type="primary" className={styles.buttonAdd}>
               <PlusOutlined />
@@ -131,7 +117,7 @@ const Area: NextPage = () => {
           </Link>
         </div>
         <div className={styles.table}>
-          <Table columns={columns} dataSource={data} onChange={onChange} />
+          <Table columns={columns} dataSource={dataSource} onChange={onChange} rowKey="id" />
         </div>
       </div>
     </div>

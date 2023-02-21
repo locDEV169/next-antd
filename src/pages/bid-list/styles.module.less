@@ -1,47 +1,51 @@
 .title {
-    background: #f2f5f7;
-    border-radius: 10px;
-    font-family: 'Ubuntu';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 31px;
+  background: #f2f5f7;
+  border-radius: 10px;
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 31px;
+  display: flex;
+  align-items: center;
+  color: #424b5a;
+  margin: 30px 10px;
+  height: 60px;
+}
+.content {
+  margin: 15px 0;
+  background-color: #f2f5f7;
+
+  .headerContent {
     display: flex;
-    align-items: center;
-    color: #424b5a;
-    margin: 30px 10px;
-    height: 60px;
+    justify-content: flex-end;
   }
-  .content {
-    margin: 15px 0;
-    background-color: #f2f5f7;
-  
-    .headerContent {
-      display: flex;
-      justify-content: flex-end;
-    }
+}
+.buttonAction {
+  .buttonViewDetail {
+    color: #c2d1d9;
+    border: 1px solid #c2d1d9;
+    margin-right: 20px;
   }
-  .buttonAction {
-    .buttonViewDetail {
-      color: #c2d1d9;
-      border: 1px solid #c2d1d9;
-      margin-right: 20px;
-    }
-    .buttonReject {
-      color: #fc5640;
-      border: 1px solid #fc5640;
-    }
+  .buttonReject {
+    color: #fc5640;
+    border: 1px solid #fc5640;
   }
-  .height40 {
-    height: 40px;
-  }
-  .borderRadius5 {
-    border-radius: 5px;
-  }
-  .borderStatus {
-      background: #FFFFFF !important;
-      color: #424B5A !important;
-      border: 1px solid #424B5A !important;
-      border-radius: 20px;
-  }
-  
+}
+.height40 {
+  height: 40px;
+}
+.borderRadius5 {
+  border-radius: 5px;
+}
+.borderStatus {
+  // background: #ffffff !important;
+  // color: #424b5a !important;
+  // border: 1px solid #424b5a !important;
+  border-radius: 10px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+}
