@@ -1,9 +1,9 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, notification, Popover } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
+import { authRequest } from 'api/axios';
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import api from 'pages/api';
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.less';
 
@@ -55,7 +55,7 @@ const EnvironmentalValues: NextPage = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`${BID_API}`, {});
+      const response = await authRequest.get(`${BID_API}`, {});
       const { data } = response;
       setDataSource(data);
     } catch (err) {

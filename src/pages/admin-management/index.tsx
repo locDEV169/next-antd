@@ -4,15 +4,15 @@ import {
   EditTwoTone,
   LoadingOutlined,
   PlusOutlined,
-  UserOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import { Avatar, Button, Form, FormInstance, Input, notification, Select, Table, Upload, UploadProps } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import { ColumnsType, TableProps } from 'antd/lib/table';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
+import { authRequest } from 'api/axios';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
-import api from 'pages/api';
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles.module.less';
 
@@ -44,7 +44,7 @@ const AdminManagement: NextPage = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`${USER_API}`, {});
+      const response = await authRequest.get(`${USER_API}`, {});
       const { data } = response;
       setDataSource(data);
     } catch (err) {
@@ -222,7 +222,7 @@ const AdminManagement: NextPage = () => {
             dataSource={dataSource}
             onChange={onChange}
             rowKey="id"
-            scroll={{ y: `calc(100vh - 550px)` }}
+            // scroll={{ y: `calc(100vh - 550px)` }}
           />
         </div>
       </div>

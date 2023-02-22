@@ -1,9 +1,9 @@
 import { Button, notification } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
+import { authRequest } from 'api/axios';
 import clsx from 'clsx';
 import moment from "moment";
 import type { NextPage } from 'next';
-import api from 'pages/api';
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.less';
 
@@ -23,7 +23,7 @@ const JCreditRegistration: NextPage = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`${BID_API}`, {});
+      const response = await authRequest.get(`${BID_API}`, {});
       const { data } = response;
       setDataSource(data);
     } catch (err) {
