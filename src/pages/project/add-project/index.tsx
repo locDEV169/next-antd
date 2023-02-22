@@ -2,6 +2,7 @@ import { LeftOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, DatePickerProps, Form, Select, Upload, UploadProps, Input, DatePicker } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
+import { postRequest } from 'api/post-request';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -22,6 +23,8 @@ const AddProject: NextPage = () => {
   const [imageUrl, setImageUrl] = useState<string>();
   const formRef = useRef<FormInstance>(null);
   const router = useRouter()
+  const PROJECT_API = 'projects';
+
 
   const uploadButton = (
     <div>
@@ -76,6 +79,16 @@ const AddProject: NextPage = () => {
     console.log(date, dateString);
   };
 
+  const onSumbit = async (values: any) => {
+    console.log(values);
+    try {
+      const response = await postRequest(PROJECT_API, values);
+      console.log('data response', response, values);
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+
   return (
     <div>
       <div className={styles.headerTitle}>
@@ -83,7 +96,7 @@ const AddProject: NextPage = () => {
           <div>
             <LeftOutlined style={{ fontSize: 20 }} onClick={() => router.back()}/>
           </div>
-          <div className={styles.title}>Add New Area</div>
+          <div className={styles.title}>Add Project</div>
         </div>
       </div>
       <div className={styles.content}>
@@ -105,7 +118,7 @@ const AddProject: NextPage = () => {
           <Form
             name="naturalResourceInformation"
             initialValues={{ remember: true }}
-            // onFinish={onFinish}
+            onFinish={onSumbit}
             // onFinishFailed={onFinishFailed}
             autoComplete="off"
             className={clsx(styles.formAdd)}
@@ -136,7 +149,7 @@ const AddProject: NextPage = () => {
               <div className={clsx(styles.secondLine)}>
                 <Form.Item
                   label="Project Name"
-                  name="projectName"
+                  name="name"
                   rules={[{ required: true, message: 'Please input your Project Name!' }]}
                   className={clsx(styles.left, styles.formItem)}
                   style={{ marginRight: 40 }}
@@ -145,7 +158,7 @@ const AddProject: NextPage = () => {
                 </Form.Item>
                 <Form.Item
                   label="Project Number"
-                  name="projectNumber"
+                  name="number"
                   rules={[{ required: true, message: 'Please input your Project Number!' }]}
                   className={clsx(styles.right)}
                 >
@@ -239,7 +252,7 @@ const AddProject: NextPage = () => {
               </div>
               <Form.Item
                 label="Project's Description"
-                name="ProjectDescription"
+                name="description"
                 rules={[{ required: true, message: 'Please input your Project Description!' }]}
                 className={clsx(styles.areaDescription)}
               >

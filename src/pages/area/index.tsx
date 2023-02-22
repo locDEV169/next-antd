@@ -11,7 +11,7 @@ interface DataType {
   key: React.Key;
   image?: string;
   area?: string;
-  discordLink?: string;
+  discordUrl?: string;
   description?: string;
   customData?: string;
   name?: string;
@@ -26,11 +26,11 @@ interface Origanization {
 
 const Area: NextPage = () => {
   const [dataSource, setDataSource] = useState<DataType[]>([]);
-  const BID_API = 'http://localhost:5000/area';
+  const AREA_API = 'http://localhost:5000/area';
 
   const getData = async () => {
     try {
-      const response = await authRequest.get(`${BID_API}`, {});
+      const response = await authRequest.get(`${AREA_API}`, {});
       const { data } = response;
       setDataSource(data);
     } catch (err) {
@@ -76,14 +76,14 @@ const Area: NextPage = () => {
     {
       title: 'Discord Link',
       dataIndex: 'origanization',
-      render: (item: Origanization) => <div className={styles.discordLink}>{item.discordUrl}</div>,
+      render: (item: Origanization) => <div className={styles.discordLink}>{item?.discordUrl}</div>,
     },
     {
       title: 'Description',
       dataIndex: 'description',
     },
     {
-      title: 'Contribution',
+      title: 'Custom Data',
       dataIndex: 'customData',
     },
     {

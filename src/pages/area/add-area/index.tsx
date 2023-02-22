@@ -1,10 +1,11 @@
 import { LeftOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, FormInstance, Input, Select, Upload } from 'antd';
+import { Button, Form, Input, Upload } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload';
+import { postRequest } from 'api/post-request';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import styles from './styles.module.less';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
@@ -13,14 +14,14 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   reader.readAsDataURL(img);
 };
 
-const { Option } = Select;
 const { TextArea } = Input;
 
 const AddArea: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  const formRef = useRef<FormInstance>(null);
+  // const formRef = useRef<FormInstance>(null);
   const router = useRouter();
+  const AREA_API = 'area';
 
   const uploadButton = (
     <div>
@@ -43,24 +44,13 @@ const AddArea: NextPage = () => {
     }
   };
 
-  const onAdminChange = (value: string) => {
-    switch (value) {
-      case 'male':
-        formRef.current?.setFieldsValue({ note: 'Hi, man!' });
-        break;
-      case 'female':
-        formRef.current?.setFieldsValue({ note: 'Hi, lady!' });
-        break;
-      case 'other':
-        formRef.current?.setFieldsValue({ note: 'Hi there!' });
-        break;
-      default:
-        break;
+  const onFinish = async (values: any) => {
+    try {
+      const response = await postRequest(AREA_API, values);
+      console.log('data response', response, values);
+    } catch (error) {
+      console.log('error', error);
     }
-  };
-
-  const onFinish = (values: any) => {
-    console.log(values);
   };
 
   return (
@@ -103,7 +93,7 @@ const AddArea: NextPage = () => {
             <div className={styles.firstLine}>
               <Form.Item
                 label="Area Name"
-                name="areaName"
+                name="name"
                 rules={[{ required: true, message: 'Please input your Area Name!' }]}
                 className={clsx(styles.areaName, styles.formItem)}
                 style={{ marginRight: 40 }}
@@ -119,40 +109,13 @@ const AddArea: NextPage = () => {
                 <Input />
               </Form.Item>
             </div>
-            <div className={styles.secondLine}>
-              <Form.Item
-                label="Admin"
-                name="admin"
-                rules={[{ required: true, message: 'Please input your Admin!' }]}
-                className={clsx(styles.admin)}
-              >
-                <Select
-                  placeholder="Select a Admin (Local Government) "
-                  onChange={onAdminChange}
-                  allowClear
-                  className={clsx(styles.customInput)}
-                >
-                  <Option value="male">male</Option>
-                  <Option value="female">female</Option>
-                  <Option value="other">other</Option>
-                </Select>
-              </Form.Item>
-            </div>
             <Form.Item
               label="Area's Description"
-              name="areaDescription"
+              name="description"
               rules={[{ required: true, message: 'Please input your Area Description!' }]}
               className={clsx(styles.areaDescription)}
             >
               <TextArea rows={6} placeholder="Enter the description of the area" />
-            </Form.Item>
-            <Form.Item
-              label="Area's Contribution"
-              name="areaContribution"
-              rules={[{ required: true, message: 'Please input your Area Contribution!' }]}
-              className={clsx(styles.areaContribution)}
-            >
-              <TextArea rows={6} placeholder="Enter the area's contribution" />
             </Form.Item>
             <Form.Item className={styles.formButton}>
               <div>
