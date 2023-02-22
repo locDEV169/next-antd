@@ -1,9 +1,9 @@
 import { LeftOutlined, LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Modal, notification, Row, Steps } from 'antd';
+import { authRequest } from 'api/axios';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import api from 'pages/api';
 import { Fragment, useEffect, useState } from 'react';
 import styles from './styles.module.less';
 
@@ -35,7 +35,7 @@ const ViewDetail: NextPage = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`${BID_ID_API}`, {});
+      const response = await authRequest.get(`${BID_ID_API}`, {});
       const { data } = response;
       setDataSource(data);
     } catch (err) {

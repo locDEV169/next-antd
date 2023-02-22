@@ -2,16 +2,21 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const authRequest = axios.create({
-  baseURL: '/some-url',
+  baseURL: '/',
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "",
+  },
 });
 
 const handleSuccess = (res: AxiosResponse) => {
-  if (res.request) return res.data;
+  // if (res.request) return res.data;
+  if (res.request) return res;
 };
 
 const handleError = (err: AxiosError) => {
-  const data = err?.response?.data;
-
+  // const data = err?.response?.data;
+  const data = err?.response;
   return Promise.reject(data);
 };
 

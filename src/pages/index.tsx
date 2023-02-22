@@ -1,9 +1,9 @@
 import { Card, notification, Tag } from 'antd';
+import { authRequest } from 'api/axios';
 import clsx from 'clsx';
 import LayoutNaturalResouce from 'components/Layout-Natural-Resource';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import api from './api';
 import styles from './styles.module.less';
 
 const { Meta } = Card;
@@ -32,7 +32,7 @@ const Home: NextPage = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`${NFT_API}`, {});
+      const response = await authRequest.get(`${NFT_API}`, {});
       const { data } = response;
       setDataSource(data);
     } catch (err) {
@@ -46,13 +46,13 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [dataSource]);
   console.log('getData', dataSource);
 
   const contentList: Record<string, React.ReactNode> = {
     tab1: (
       <div className={styles.contentCard}>
-        {dataSource.map((item: any, index) => (
+        {dataSource && dataSource.map((item: any, index) => (
           <div className={styles.card} key={index}>
             <Card
               style={{ width: 500, margin: 20 }}

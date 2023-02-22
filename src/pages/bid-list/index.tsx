@@ -1,9 +1,9 @@
 import { Button, notification } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
+import { authRequest } from 'api/axios';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import api from 'pages/api';
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.less';
 
@@ -33,7 +33,7 @@ const BIDList: NextPage = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`${BID_API}`, {});
+      const response = await authRequest.get(`${BID_API}`, {});
       const { data } = response;
       setDataSource(data);
     } catch (err) {
