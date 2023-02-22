@@ -124,54 +124,6 @@ const EnvironmentalValues: NextPage = () => {
     },
   ];
 
-  const data: DataType[] = [
-    {
-      key: '1',
-      naturalResource: 'Bach Ma Forest',
-      environmentalValueType: 'CO2',
-      price: '200 ETH',
-      // estimatedValue: '1000 (Hectare)',
-      // actualValue: '900 (Hectare)',
-      year: 2022,
-    },
-    {
-      key: '2',
-      naturalResource: 'Bach Ma Forest',
-      environmentalValueType: 'CO2',
-      price: '200 ETH',
-      // estimatedValue: '1000 (Hectare)',
-      // actualValue: '900 (Hectare)',
-      year: 2022,
-    },
-    {
-      key: '3',
-      naturalResource: 'Bach Ma Forest',
-      environmentalValueType: 'CO2',
-      price: '200 ETH',
-      // estimatedValue: '1000 (Hectare)',
-      // actualValue: '900 (Hectare)',
-      year: 2022,
-    },
-    {
-      key: '4',
-      naturalResource: 'Bach Ma Forest',
-      environmentalValueType: 'CO2',
-      price: '200 ETH',
-      // estimatedValue: '1000 (Hectare)',
-      // actualValue: '900 (Hectare)',
-      year: 2022,
-    },
-    {
-      key: '5',
-      naturalResource: 'Bach Ma Forest',
-      environmentalValueType: 'CO2',
-      price: '200 ETH',
-      // estimatedValue: '1000 (Hectare)',
-      // actualValue: '900 (Hectare)',
-      year: 2022,
-    },
-  ];
-
   const onTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
   };

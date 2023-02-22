@@ -46,7 +46,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     getData();
-  }, [dataSource]);
+  }, []);
   console.log('getData', dataSource);
 
   const contentList: Record<string, React.ReactNode> = {
