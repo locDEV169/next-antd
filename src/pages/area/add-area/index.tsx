@@ -8,6 +8,23 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import styles from './styles.module.less';
 
+interface DataType {
+  key: React.Key;
+  image?: string;
+  area?: string;
+  discordUrl?: string;
+  description?: string;
+  customData?: string;
+  name?: string;
+  origanization: Origanization;
+}
+interface Origanization {
+  description?: string;
+  discordUrl?: string;
+  name?: string;
+  royaltyReceiver?: string;
+}
+
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result as string));
@@ -44,13 +61,11 @@ const AddArea: NextPage = () => {
     }
   };
 
-  const onFinish = async (values: any) => {
-    try {
-      const response = await postRequest(AREA_API, values);
-      console.log('data response', response, values);
-    } catch (error) {
-      console.log('error', error);
-    }
+  const onFinish = async (values: DataType) => {
+    const response = await postRequest(AREA_API, values);
+    console.log(response);
+    
+    console.log('data response', response, values);
   };
 
   return (
