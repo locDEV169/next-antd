@@ -1,5 +1,6 @@
 import { notification } from 'antd';
 import { authRequest } from 'api/axios';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export const postRequest = async (url: string, params: any): Promise<any> => {
   const domain = 'http://localhost:5000';
@@ -62,3 +63,23 @@ const openNotificationWarning = (message: string, description: string) => {
     placement: 'bottomRight',
   });
 };
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const url = `${process.env['PAYMENT_ENDPOINT']}/payment`;
+  const cartToken = req.cookies['cart-token'] || '';
+  const checkoutToken = req.cookies['checkout-token'] || '';
+
+  const headers = { 'x-cart-token': cartToken, 'x-checkout-token': checkoutToken, 'Content-Type': 'application/json' };
+  if (req.method === 'GET') {
+    const resp = await fetch(url, { headers });
+    const html = await resp.text();
+    resp.headers.forEach((v, k) => res.setHeader(k, v));
+    res.send(html);
+  } else {
+    const cart = req.query.c;
+    const resp = await fetch(url + '/' + cart, { method: 'POST', headers, body: JSON.stringify(req.body) });
+    const json = await resp.json();
+    resp.headers.forEach((v, k) => res.setHeader(k, v));
+    res.status(resp.status).send(json);
+  }
+}

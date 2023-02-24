@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, notification, Popover } from 'antd';
+import { Button, Popover } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
 import { authRequest } from 'api/axios';
 import type { NextPage } from 'next';
@@ -26,20 +26,23 @@ interface Origanization {
 
 const Area: NextPage = () => {
   const [dataSource, setDataSource] = useState<DataType[]>([]);
-  const AREA_API = 'http://localhost:5000/area';
+  const AREA_API = 'http://localhost:5000/areas';
 
   const getData = async () => {
-    try {
-      const response = await authRequest.get(`${AREA_API}`, {});
+    // try {
+    //   const response = await authRequest.get(`${AREA_API}`, {});
+    //   const { data } = response;
+    //   setDataSource(data);
+    // } catch (err) {
+    //   notification.error({
+    //     message: 'error message',
+    //     description: 'error description',
+    //   });
+    //   setDataSource([]);
+    // }
+    const response = await authRequest.get(`${AREA_API}`, {});
       const { data } = response;
       setDataSource(data);
-    } catch (err) {
-      notification.error({
-        message: 'error message',
-        description: 'error description',
-      });
-      setDataSource([]);
-    }
   };
 
   useEffect(() => {
