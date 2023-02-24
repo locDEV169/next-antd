@@ -31,17 +31,20 @@ const Home: NextPage = () => {
   };
 
   const getData = async () => {
-    try {
-      const response = await authRequest.get(`${NFT_API}`, {});
-      const { data } = response;
-      setDataSource(data);
-    } catch (err) {
-      notification.error({
-        message: 'error.message',
-        description: 'error.description',
-      });
-      setDataSource([]);
-    }
+    // try {
+    //   const response = await authRequest.get(`${NFT_API}`, {});
+    //   const { data } = response;
+    //   setDataSource(data);
+    // } catch (err) {
+    //   notification.error({
+    //     message: 'error.message',
+    //     description: 'error.description',
+    //   });
+    //   setDataSource([]);
+    // }
+    const response = await authRequest.get(`${NFT_API}`, {});
+    const { data } = response;
+    setDataSource(data);
   };
 
   useEffect(() => {
@@ -52,70 +55,71 @@ const Home: NextPage = () => {
   const contentList: Record<string, React.ReactNode> = {
     tab1: (
       <div className={styles.contentCard}>
-        {dataSource && dataSource.map((item: any, index) => (
-          <div className={styles.card} key={index}>
-            <Card
-              style={{ width: 500, margin: 20 }}
-              cover={<img alt="example" src={item.imageUrl} width={500} height={300} />}
-              // actions={[
-              //   <SettingOutlined key="setting" />,
-              //   <EditOutlined key="edit" />,
-              //   <EllipsisOutlined key="ellipsis" />,
-              // ]}
-              key={index}
-            >
-              <Meta
-                // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                title={item.name}
-              />
-              <div className={styles.description}>
+        {dataSource &&
+          dataSource.map((item: any, index) => (
+            <div className={styles.card} key={index}>
+              <Card
+                style={{ width: 500, margin: 20 }}
+                cover={<img alt="example" src={item.imageUrl} width={500} height={300} />}
+                // actions={[
+                //   <SettingOutlined key="setting" />,
+                //   <EditOutlined key="edit" />,
+                //   <EllipsisOutlined key="ellipsis" />,
+                // ]}
+                key={index}
+              >
+                <Meta
+                  // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                  title={item.name}
+                />
+                <div className={styles.description}>
+                  <Meta
+                    // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                    title={item.enviromentValue}
+                    // description="This is the description"
+                  />
+                  <div style={{ display: 'flex' }}>
+                    <Tag color="default" className={styles.tags} style={{ marginLeft: '0px' }}>
+                      co2
+                    </Tag>
+                    <Tag color="default" className={styles.tags}>
+                      water
+                    </Tag>
+                    <Tag color="default" className={styles.tags}>
+                      microorgainsm
+                    </Tag>
+                  </div>
+                </div>
                 <Meta
                   // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                   title={item.enviromentValue}
                   // description="This is the description"
                 />
-                <div style={{ display: 'flex' }}>
-                  <Tag color="default" className={styles.tags} style={{ marginLeft: '0px' }}>
-                    co2
-                  </Tag>
-                  <Tag color="default" className={styles.tags}>
-                    water
-                  </Tag>
-                  <Tag color="default" className={styles.tags}>
-                    microorgainsm
-                  </Tag>
+                <div className={styles.description}>
+                  <div className={styles.title}>XX Forest</div>
                 </div>
-              </div>
-              <Meta
-                // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                title={item.enviromentValue}
-                // description="This is the description"
-              />
-              <div className={styles.description}>
-                <div className={styles.title}>XX Forest</div>
-              </div>
-              <Meta
-                // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                title={item.enviromentValue}
-              />
-              <div className={styles.description}>
-                <div className={styles.title}>XX Forest</div>
-                <div style={{ display: 'flex' }}>
-                  <Tag color="default" className={styles.tags} style={{ marginLeft: '0px' }}>
-                    co2
-                  </Tag>
-                  <Tag color="default" className={styles.tags}>
-                    water
-                  </Tag>
-                  <Tag color="default" className={styles.tags}>
-                    microorgainsm
-                  </Tag>
+                <Meta
+                  // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                  title={item.enviromentValue}
+                />
+                <div className={styles.description}>
+                  <div className={styles.title}>XX Forest</div>
+                  <div style={{ display: 'flex' }}>
+                    <Tag color="default" className={styles.tags} style={{ marginLeft: '0px' }}>
+                      co2
+                    </Tag>
+                    <Tag color="default" className={styles.tags}>
+                      water
+                    </Tag>
+                    <Tag color="default" className={styles.tags}>
+                      microorgainsm
+                    </Tag>
+                  </div>
                 </div>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '10px' }}>View Detail</div>
-            </Card>
-          </div>
-        ))}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '10px' }}>View Detail</div>
+              </Card>
+            </div>
+          ))}
       </div>
     ),
     tab2: (

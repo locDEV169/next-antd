@@ -1,7 +1,7 @@
-import { SearchOutlined, UserOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, MailOutlined, SearchOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useAuthRequestChallengeEvm } from '@moralisweb3/next';
 import { InjectedConnector } from '@wagmi/core';
-import { Button, Drawer, Form, Input, Layout, Modal, notification, Select } from 'antd';
+import { Button, Col, Drawer, Form, Input, Layout, Menu, MenuProps, Modal, notification, Row, Select } from 'antd';
 import { useTrezor } from 'components/Trezor';
 import { useAppDispatch } from 'hooks';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -15,6 +15,47 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import styles from './styles.module.less';
 
 const { Header, Content, Footer } = Layout;
+type MenuItem = Required<MenuProps>['items'][number];
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  type?: 'group'
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  } as MenuItem;
+}
+
+const items: MenuProps['items'] = [
+  getItem('Navigation One', 'sub1', <MailOutlined />, [
+    getItem('Item 1', 'g1', null, [getItem('Option 1', '1'), getItem('Option 2', '2')], 'group'),
+    getItem('Item 2', 'g2', null, [getItem('Option 3', '3'), getItem('Option 4', '4')], 'group'),
+  ]),
+
+  getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
+    getItem('Option 5', '5'),
+    getItem('Option 6', '6'),
+    getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
+  ]),
+
+  { type: 'divider' },
+
+  getItem('Navigation Three', 'sub4', <SettingOutlined />, [
+    getItem('Option 9', '9'),
+    getItem('Option 10', '10'),
+    getItem('Option 11', '11'),
+    getItem('Option 12', '12'),
+  ]),
+
+  getItem('Group', 'grp', null, [getItem('Option 13', '13'), getItem('Option 14', '14')], 'group'),
+];
 
 const MainLayout: FC = ({ children }) => {
   const { data } = useSession();
@@ -183,7 +224,11 @@ const MainLayout: FC = ({ children }) => {
 
   const onFinish = (values: any) => {
     console.log(values);
-  }
+  };
+
+  const onClickMenu: MenuProps['onClick'] = (e: any) => {
+    console.log('click ', e);
+  };
 
   return (
     <Layout className={styles.root}>
@@ -304,7 +349,19 @@ const MainLayout: FC = ({ children }) => {
         </Modal>
       </Header>
       <Content style={{ padding: '0 50px', minHeight: '85vh' }}>
-        <div>{children}</div>
+        <Row style={{ display: 'flex', flexDirection: 'row' }}>
+          <Col span={4} style={{ marginTop: '40px', maxHeight: '80vh' }}>
+            <Menu
+              onClick={onClickMenu}
+              style={{ width: '90%',maxHeight: '80vh', overflow: 'auto', overflowX: 'hidden',overflowY: 'auto' }}
+              defaultSelectedKeys={['1']}
+              defaultOpenKeys={['sub1']}
+              mode="inline"
+              items={items}
+            />
+          </Col>
+          <Col span={20}>{children}</Col>
+        </Row>
         <Drawer title={false} placement="right" onClose={onClose} open={openDrawer}>
           <div className={styles.user}>
             <div>
