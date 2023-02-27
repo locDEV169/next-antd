@@ -18,62 +18,46 @@
     }
   }
 }
-.content {
-  display: flex;
-  justify-content: space-between;
-  .leftContent {
-    margin-left: 40px;
-    flex-grow: 4;
-    .firstLine {
-      .ant-form-item-control {
-        margin-right: 20px;
-      }
+.contentAdd {
+  .title {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 31px;
+  }
+  .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  .areaCustomMap {
+    .ant-row {
+      display: flex;
+      flex-flow: row wrap !important;
+      min-width: 0;
+      flex-direction: row;
+      align-items: flex-start;
     }
   }
-  .formAdd {
-    .firstLine {
-      display: flex;
-      justify-content: space-between;
-      .areaName,
-      .discordLink {
-        flex-grow: 2;
-        input {
-          height: 40px;
-        }
-      }
-    }
-    .secondLine {
-      display: flex;
-      justify-content: space-between;
-      .admin {
-        flex-grow: 2;
-        .ant-select-selector,
-        .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-          height: 40px;
-          display: flex;
-          align-items: center;
-        }
-      }
-    }
-    .buttonSubmit {
-      width: 80px;
-      height: 40px;
-    }
-    .formItem {
-      display: flex;
-      flex-direction: column;
-    }
-    .buttonSubmit {
-      width: 80px;
-      height: 40px;
-    }
-    .formItem {
-      display: flex;
-      flex-direction: column;
-    }
-    .formButton {
-      display: flex;
-      justify-content: flex-end;
-    }
+  .buttonSubmit {
+    width: 80px;
+    height: 40px;
+  }
+  .formItem {
+    display: flex;
+    flex-direction: column;
+  }
+  .buttonSubmit {
+    width: 80px;
+    height: 40px;
+  }
+  .formItem {
+    display: flex;
+    flex-direction: column;
+  }
+  .formButton {
+    display: flex;
+    justify-content: flex-end;
   }
 }

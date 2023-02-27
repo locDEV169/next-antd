@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@ckeditor/ckeditor5-build-classic": "^36.0.1",
+    "@ckeditor/ckeditor5-react": "^5.1.0",
     "@moralisweb3/next": "2.11.0",
     "@reduxjs/toolkit": "^1.6.2",
     "@types/google.maps": "^3.51.1",

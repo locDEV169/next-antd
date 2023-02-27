@@ -2,6 +2,7 @@ import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Popover } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
 import { authRequest } from 'api/axios';
+import clsx from 'clsx';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -26,7 +27,7 @@ interface Origanization {
 
 const Area: NextPage = () => {
   const [dataSource, setDataSource] = useState<DataType[]>([]);
-  const AREA_API = 'http://localhost:5000/areas';
+  const AREA_API = 'http://localhost:5000/area';
 
   const getData = async () => {
     // try {
@@ -41,8 +42,8 @@ const Area: NextPage = () => {
     //   setDataSource([]);
     // }
     const response = await authRequest.get(`${AREA_API}`, {});
-      const { data } = response;
-      setDataSource(data);
+    const { data } = response;
+    setDataSource(data);
   };
 
   useEffect(() => {
@@ -111,7 +112,7 @@ const Area: NextPage = () => {
     <div>
       <div className={styles.content}>
         <div className={styles.headerContent}>
-          <div className={styles.contentTotal}>{dataSource.length} Areas in total</div>
+          <div className={clsx(styles.title)}>Area</div>
           <Link href="/area/add-area">
             <Button type="primary" className={styles.buttonAdd}>
               <PlusOutlined />
