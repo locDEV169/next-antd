@@ -1,11 +1,11 @@
-import { LeftOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Upload } from 'antd';
-import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload';
+import { HeatMapOutlined, LeftOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, Modal, Row } from 'antd';
 import { postRequest } from 'api/post-request';
 import clsx from 'clsx';
+import Map from 'components/Map/map';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './styles.module.less';
 
 interface DataType {
@@ -14,7 +14,7 @@ interface DataType {
   area?: string;
   discordUrl?: string;
   description?: string;
-  customData?: string;
+  customData?: Coordinates | Coordinates[];
   name?: string;
   origanization: Origanization;
 }
@@ -24,49 +24,53 @@ interface Origanization {
   name?: string;
   royaltyReceiver?: string;
 }
-
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
-
-const { TextArea } = Input;
+interface Coordinates {
+  lat?: number;
+  lng: number;
+}
 
 const AddArea: NextPage = () => {
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>();
-  // const formRef = useRef<FormInstance>(null);
   const router = useRouter();
   const AREA_API = 'area';
+  const [openModalMap, setOpenModalMap] = useState(false);
+  const keyGoogleMap = 'AIzaSyCzHT1SSRP2RlIQqdypJ6z_gC-UhAP7rYI';
+  const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${keyGoogleMap}`;
+  const editorRef = useRef<any>();
+  const [editorLoaded, setEditorLoaded] = useState(false);
+  const { CKEditor, ClassicEditor } = editorRef.current || {};
+  const [dataEditor, setDataEditor] = useState<any>();
+  const [coordinates, setCoordinates] = useState<any>([])
 
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
-
-  const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as RcFile, (url: any) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
-    }
-  };
+  useEffect(() => {
+    editorRef.current = {
+      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor, //Added .CKEditor
+      ClassicEditor: require('@ckeditor/ckeditor5-build-classic'),
+    };
+    setEditorLoaded(true);
+  }, []);
 
   const onFinish = async (values: DataType) => {
-    const response = await postRequest(AREA_API, values);
-    console.log(response);
-    
-    console.log('data response', response, values);
+    const params = {
+      customData: coordinates,
+      name: values.name,
+      description: dataEditor,
+    };
+    const response = await postRequest(AREA_API, params);
+
+    console.log('data response', response, params);
   };
+
+  const onIconClick = () => {
+    setOpenModalMap(true);
+  };
+
+  const handleCancel = () => {
+    setOpenModalMap(false);
+  };
+
+  useEffect(() => {
+    console.log(coordinates)
+  }, [coordinates])
 
   return (
     <div>
@@ -78,34 +82,30 @@ const AddArea: NextPage = () => {
           <div className={styles.title}>Add New Area</div>
         </div>
       </div>
-      <div className={styles.content}>
-        <div className={styles.rightContent}>
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            // beforeUpload={beforeUpload}
-            onChange={handleChange}
-            style={{ width: '300px !important', height: '200px !important' }}
-          >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-          </Upload>
-        </div>
-        <div className={styles.leftContent}>
+      <div className={clsx(styles.contentAdd)}>
+        <div className={styles.title}>Area Information</div>
+        <Row className={clsx(styles.row)}>
           <Form
             name="basic"
             // labelCol={{ span: 8 }}
             // wrapperCol={{ span: 16 }}
-            // style={{ maxWidth: 600, margin: '10px 0' }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             // onFinishFailed={onFinishFailed}
             autoComplete="off"
             className={styles.formAdd}
+            style={{ display: 'contents' }}
           >
-            <div className={styles.firstLine}>
+            <Col span={12}>
+              <Form.Item
+                label="Custom map"
+                name="Custom Data"
+                // rules={[{ required: true, message: 'Please input your Area Name!' }]}
+                className={clsx(styles.areaCustomMap, styles.formItem)}
+                style={{ marginRight: 40 }}
+              >
+                <HeatMapOutlined style={{ fontSize: 30 }} onClick={() => onIconClick()} />
+              </Form.Item>
               <Form.Item
                 label="Area Name"
                 name="name"
@@ -115,23 +115,33 @@ const AddArea: NextPage = () => {
               >
                 <Input />
               </Form.Item>
+            </Col>
+            <Col span={12}>
               <Form.Item
-                label="Discord link"
-                name="discordLink"
-                rules={[{ required: true, message: 'Please input your Discord link!' }]}
-                className={clsx(styles.discordLink)}
+                label="Area's Description"
+                name="description"
+                rules={[{ required: true, message: 'Please input your Area Description!' }]}
+                className={clsx(styles.areaDescription)}
               >
-                <Input />
+                {editorLoaded ? (
+                  <CKEditor
+                    editor={ClassicEditor}
+                    style={{ maxHeight: '500px' }}
+                    // data={data}
+                    // onReady={(editor) => {
+                    //   // You can store the "editor" and use when it is needed.
+                    //   console.log('Editor is ready to use!', editor);
+                    // }}
+                    onChange={(_event: any, editor: any) => {
+                      const data = editor.getData();
+                      setDataEditor(data);
+                    }}
+                  />
+                ) : (
+                  <p>Carregando...</p>
+                )}
               </Form.Item>
-            </div>
-            <Form.Item
-              label="Area's Description"
-              name="description"
-              rules={[{ required: true, message: 'Please input your Area Description!' }]}
-              className={clsx(styles.areaDescription)}
-            >
-              <TextArea rows={6} placeholder="Enter the description of the area" />
-            </Form.Item>
+            </Col>
             <Form.Item className={styles.formButton}>
               <div>
                 <Button type="ghost" htmlType="submit" style={{ marginRight: 20 }} className={styles.buttonSubmit}>
@@ -143,8 +153,23 @@ const AddArea: NextPage = () => {
               </div>
             </Form.Item>
           </Form>
-        </div>
+        </Row>
       </div>
+      <Modal
+        title="Map"
+        open={openModalMap}
+        onCancel={handleCancel}
+        footer={false}
+        width={750}
+      >
+        <Map
+          googleMapURL={googleMapURL}
+          loadingElement={<div style={{ height: `60%` }} />}
+          containerElement={<div style={{ height: `60vh`, margin: `auto` }} />}
+          mapElement={<div style={{ height: `100%` }} />}
+          setCoordinates={setCoordinates}
+        />
+      </Modal>
     </div>
   );
 };

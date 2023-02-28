@@ -1,7 +1,8 @@
 import { AppstoreOutlined, MailOutlined, SearchOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useAuthRequestChallengeEvm } from '@moralisweb3/next';
 import { InjectedConnector } from '@wagmi/core';
-import { Button, Col, Drawer, Form, Input, Layout, Menu, MenuProps, Modal, notification, Row, Select } from 'antd';
+import { Button, Drawer, Form, Input, Layout, Menu, MenuProps, Modal, notification, Select } from 'antd';
+import Sider from 'antd/lib/layout/Sider';
 import { useTrezor } from 'components/Trezor';
 import { useAppDispatch } from 'hooks';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -33,29 +34,15 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuProps['items'] = [
-  getItem('Navigation One', 'sub1', <MailOutlined />, [
-    getItem('Item 1', 'g1', null, [getItem('Option 1', '1'), getItem('Option 2', '2')], 'group'),
-    getItem('Item 2', 'g2', null, [getItem('Option 3', '3'), getItem('Option 4', '4')], 'group'),
-  ]),
-
-  getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
-    getItem('Option 5', '5'),
-    getItem('Option 6', '6'),
-    getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
-  ]),
-
-  { type: 'divider' },
-
-  getItem('Navigation Three', 'sub4', <SettingOutlined />, [
-    getItem('Option 9', '9'),
-    getItem('Option 10', '10'),
-    getItem('Option 11', '11'),
-    getItem('Option 12', '12'),
-  ]),
-
-  getItem('Group', 'grp', null, [getItem('Option 13', '13'), getItem('Option 14', '14')], 'group'),
-];
+// const items: MenuProps['items'] = [
+//   getItem('Organization', 'sub1', <MailOutlined />),
+//   getItem('Area management', 'sub2', <AppstoreOutlined />),
+//   getItem('Project management', 'sub3', <SettingOutlined />),
+//   getItem('Sales management', 'sub4'),
+//   getItem('NFT management', 'sub5'),
+//   getItem('JCredit registration', 'sub6'),
+//   getItem('Profile', 'sub7'),
+// ];
 
 const MainLayout: FC = ({ children }) => {
   const { data } = useSession();
@@ -226,10 +213,6 @@ const MainLayout: FC = ({ children }) => {
     console.log(values);
   };
 
-  const onClickMenu: MenuProps['onClick'] = (e: any) => {
-    console.log('click ', e);
-  };
-
   return (
     <Layout className={styles.root}>
       <Header className={styles.header}>
@@ -238,28 +221,8 @@ const MainLayout: FC = ({ children }) => {
             <div className={styles.headerLogo}>MITSUWA</div>
           </Link>
         </div>
-        <div className={styles.headerCenter}>
-          <Link href="/">
-            <div className={styles.titleCenter}>Home</div>
-          </Link>
-          <Link href="/admin-management">
-            <div className={styles.titleCenter}>admin management</div>
-          </Link>
-          <Link href="/environmental-value">
-            <div className={styles.titleCenter}>Environmental values</div>
-          </Link>
-          <Link href="/bid-list">
-            <div className={styles.titleCenter}>bid list</div>
-          </Link>
-          <Link href="/jcredit-registration">
-            <div className={styles.titleCenter}>JCredit registration</div>
-          </Link>
-          <Link href="/my-wallet">
-            <div className={styles.titleCenter}>My wallet</div>
-          </Link>
-          <Input placeholder="search" className={styles.headerSearch} prefix={<SearchOutlined />} />
-        </div>
         <div className={styles.headerRight}>
+          <Input placeholder="search" className={styles.headerSearch} prefix={<SearchOutlined />} />
           {data?.user ? (
             <Button type="primary" onClick={() => showDrawer()} className={styles.addressConnect}>
               {data.user.address}
@@ -349,19 +312,46 @@ const MainLayout: FC = ({ children }) => {
         </Modal>
       </Header>
       <Content style={{ padding: '0 50px', minHeight: '85vh' }}>
-        <Row style={{ display: 'flex', flexDirection: 'row' }}>
-          <Col span={4} style={{ marginTop: '40px', maxHeight: '80vh' }}>
+        <Layout style={{ display: 'flex', flexDirection: 'row' }}>
+          <Sider width={250} style={{ backgroundColor: '#FFF' }}>
             <Menu
-              onClick={onClickMenu}
-              style={{ width: '90%',maxHeight: '80vh', overflow: 'auto', overflowX: 'hidden',overflowY: 'auto' }}
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
               mode="inline"
-              items={items}
-            />
-          </Col>
-          <Col span={20}>{children}</Col>
-        </Row>
+              defaultSelectedKeys={['1']}
+              defaultOpenKeys={['1']}
+              // span={4}
+              style={{
+                height: '100vh',
+                borderRight: 0,
+                marginTop: '30px',
+                maxHeight: '80vh',
+                overflow: 'auto',
+                overflowX: 'hidden',
+              }}
+            >
+              <Menu.Item key="1">
+                <Link href="/area" ><span>Area management</span></Link>
+              </Menu.Item>
+              <Menu.Item key="2">
+                <Link href="/project" ><span>Project management</span></Link>
+              </Menu.Item>
+              <Menu.Item key="3">
+                <Link href="/" ><span>Sales management</span></Link>
+              </Menu.Item>
+              <Menu.Item key="4">
+                <Link href="/" ><span>NFT management</span></Link>
+              </Menu.Item>
+              <Menu.Item key="5">
+                <Link href="/" ><span>JCredit registration</span></Link>
+              </Menu.Item>
+              <Menu.Item key="6">
+                <Link href="/admin-management" ><span>Profile</span></Link>
+              </Menu.Item>
+            </Menu>
+          </Sider>
+          <Layout style={{ padding: '0 24px 24px' }}>
+            <Content style={{ margin: 0, minHeight: 280 }}>{children}</Content>
+          </Layout>
+        </Layout>
         <Drawer title={false} placement="right" onClose={onClose} open={openDrawer}>
           <div className={styles.user}>
             <div>

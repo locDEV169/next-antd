@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { SetStateAction, useEffect, useMemo, useState } from 'react';
 import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
 import InfoBox from 'react-google-maps/lib/components/addons/InfoBox';
 import Marker from 'react-google-maps/lib/components/Marker';
@@ -24,8 +24,16 @@ const optionsPolyline = {
   radius: 30000,
   zIndex: 1,
 };
+interface Props {
+  setCoordinates?: React.Dispatch<SetStateAction<Coordinates[]>>;
+}
+interface Coordinates {
+  lat?: number;
+  lng?: number;
+  label?: string;
+}
 
-const Map = () => {
+const Map: React.FC<Props> = ({ setCoordinates }: Props) => {
   const centerMap = useMemo(() => ({ lat: 21.027763, lng: 106 }), []);
   const [guessCoords, setGuessCoords] = useState<
     | GuessCoords[]
@@ -38,8 +46,12 @@ const Map = () => {
   const handleMapClick = (e: google.maps.KmlMouseEvent | google.maps.IconMouseEvent | any) => {
     let lat = e.latLng.lat();
     let lng = e.latLng.lng();
-    setGuessCoords((prev: any) => [...prev, { lat, lng }]);
+    setGuessCoords((prev: Coordinates[]) => [...prev, { lat, lng }]);
   };
+
+  useEffect(() => {
+    setCoordinates?.(guessCoords);
+  }, [guessCoords]);
 
   return (
     <div>
@@ -52,8 +64,8 @@ const Map = () => {
         options={{ streetViewControl: false }}
       >
         {guessCoords &&
-          guessCoords.map((position: any, index: any) => (
-            <div>
+          guessCoords.map((position: Coordinates| any, index: number) => (
+            <div key={index}>
               <Marker position={new window.google.maps.LatLng(position)} key={index}>
                 <InfoBox options={options} key={index}>
                   <>
