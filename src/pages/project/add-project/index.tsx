@@ -79,10 +79,10 @@ const AddProject: NextPage = () => {
   const input = (fromYear: number, toYear: number) => {
     const a = toYear - fromYear
 
-    return a > 0 ? [...new Array(a)].map(_ => {
+    return a > 0 ? [...new Array(a)].map((_item, index) => {
       return <Fragment>
       <Col className="gutter-row" span={6}>
-        <div></div>
+        <div>{Number(fromYear) + index + 1}</div>
       </Col>
       <Col className="gutter-row" span={6}>
         <div>col-6</div>
