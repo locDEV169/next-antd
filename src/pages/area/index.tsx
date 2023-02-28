@@ -1,5 +1,5 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Popover } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
 import { authRequest } from 'api/axios';
 import clsx from 'clsx';
@@ -12,7 +12,6 @@ interface DataType {
   key: React.Key;
   image?: string;
   area?: string;
-  discordUrl?: string;
   description?: string;
   customData?: string;
   name?: string;
@@ -51,54 +50,58 @@ const Area: NextPage = () => {
   }, []);
   console.log(dataSource);
 
-  const content = (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <EditOutlined style={{ color: '#0A04F5', marginBottom: '10px' }} />
-      <DeleteOutlined style={{ color: '#FC5640' }} />
-    </div>
-  );
-
   const columns: ColumnsType<DataType> = [
-    {
-      title: 'Image',
-      dataIndex: 'image',
-      width: '200px',
-      render: (_nameImg) => (
-        <img
-          alt="example"
-          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-          className={styles.img}
-        />
-      ),
-    },
     {
       title: 'Area',
       dataIndex: 'name',
-      // width: '120px',
       render: (name) => <div className={styles.area}>{name}</div>,
-    },
-    {
-      title: 'Discord Link',
-      dataIndex: 'origanization',
-      render: (item: Origanization) => <div className={styles.discordLink}>{item?.discordUrl}</div>,
     },
     {
       title: 'Description',
       dataIndex: 'description',
+      render: (description) => (
+        <div className={styles.description} dangerouslySetInnerHTML={{ __html: description }}></div>
+      ),
     },
     {
       title: 'Custom Data',
       dataIndex: 'customData',
     },
     {
+      title: 'Status',
+      dataIndex: 'status',
+      render: (name) => <div className={styles.status}>{name}</div>,
+    },
+    {
       title: '',
       dataIndex: 'popover',
-      // key: 'x',
-      render: (text, _record) => (
-        <div className={styles.tooltip} style={{ cursor: 'pointer' }}>
-          <Popover placement="leftBottom" title={text} content={content} trigger="click">
-            ...
-          </Popover>
+      width: 120,
+      render: (_text, _record) => (
+        <div className={styles.tooltip} style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column' }}>
+          <Button
+            type="ghost"
+            htmlType="submit"
+            style={{ width: 85, height: 30 }}
+            className={clsx(styles.buttonSubmit)}
+          >
+            Edit
+          </Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ width: 85, height: 30, margin: '10px 0px' }}
+            className={clsx(styles.buttonSubmit)}
+          >
+            Remove
+          </Button>
+          <Button
+            type="ghost"
+            htmlType="submit"
+            style={{ width: 85, height: 30 }}
+            className={clsx(styles.buttonSubmit)}
+          >
+            Public
+          </Button>
         </div>
       ),
     },
@@ -112,7 +115,7 @@ const Area: NextPage = () => {
     <div>
       <div className={styles.content}>
         <div className={styles.headerContent}>
-          <div className={clsx(styles.title)}>Area</div>
+          <div className={clsx(styles.title)}>Area List</div>
           <Link href="/area/add-area">
             <Button type="primary" className={styles.buttonAdd}>
               <PlusOutlined />

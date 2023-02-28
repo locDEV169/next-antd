@@ -1,51 +1,42 @@
-import { LeftOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, DatePickerProps, Form, Select, Upload, UploadProps, Input, DatePicker } from 'antd';
+import { CheckOutlined, LeftOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, message, Row, Select, Upload, UploadProps } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import { RcFile, UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import { postRequest } from 'api/post-request';
 import clsx from 'clsx';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import styles from './styles.module.less';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
-  reader.readAsDataURL(img);
+const props: UploadProps = {
+  name: 'file',
+  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  headers: {
+    authorization: 'authorization-text',
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
 };
 
 const AddProject: NextPage = () => {
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>();
   const formRef = useRef<FormInstance>(null);
-  const router = useRouter()
+  const [form] = Form.useForm();
+  const router = useRouter();
   const PROJECT_API = 'projects';
-
-
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
-
-  const handleImageChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as RcFile, (url: any) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
-    }
-  };
+  const [fromYear, setFromYear] = useState<number>(0);
+  const [toYear, setToYear] = useState<number>(0);
+  const [click,setClick] = useState(false)
 
   const onNaturalResourceChange = (value: string) => {
     switch (value) {
@@ -63,76 +54,80 @@ const AddProject: NextPage = () => {
     }
   };
 
-  const onExpectedStartDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
-  };
-
-  const onExpectedEndDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
-  };
-
-  const onActualStartDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
-  };
-
-  const onActualEndDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
-  };
-
   const onSumbit = async (values: any) => {
     console.log(values);
-    try {
-      const response = await postRequest(PROJECT_API, values);
-      console.log('data response', response, values);
-    } catch (error) {
-      console.log('error', error);
-    }
+    // try {
+    //   const response = await postRequest(PROJECT_API, values);
+    //   console.log('data response', response, values);
+    // } catch (error) {
+    //   console.log('error', error);
+    // }
+  };
+
+  const onChangeFormYear = () => {
+    setFromYear(form.getFieldValue(['fromYear']));
+  };
+
+  const onChangeToYear = () => {
+    setToYear(form.getFieldValue(['toYear']));
+  };
+
+  const onClick = () => {
+    setClick(true)
   }
+
+  const input = (fromYear: number, toYear: number) => {
+    const a = toYear - fromYear
+
+    return a > 0 ? [...new Array(a)].map(_ => {
+      return <Fragment>
+      <Col className="gutter-row" span={6}>
+        <div></div>
+      </Col>
+      <Col className="gutter-row" span={6}>
+        <div>col-6</div>
+      </Col>
+      <Col className="gutter-row" span={6}>
+        <div>col-6</div>
+      </Col>
+      <Col className="gutter-row" span={6}>
+        <div>col-6</div>
+      </Col>
+    </Fragment>
+    }) : null
+  };
 
   return (
     <div>
       <div className={styles.headerTitle}>
         <div className={styles.headerContent}>
           <div>
-            <LeftOutlined style={{ fontSize: 20 }} onClick={() => router.back()}/>
+            <LeftOutlined style={{ fontSize: 20 }} onClick={() => router.back()} />
           </div>
           <div className={styles.title}>Add Project</div>
         </div>
       </div>
       <div className={styles.content}>
-        <div className={styles.leftContent}>
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            // beforeUpload={beforeUpload}
-            onChange={handleImageChange}
-            style={{ width: '300px !important', height: '200px !important' }}
-          >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-          </Upload>
-        </div>
+        <div className={styles.leftContent}></div>
         <div className={clsx(styles.rightContent)} style={{ width: '100%' }}>
           <Form
-            name="naturalResourceInformation"
+            name="formAddProject"
+            form={form}
             initialValues={{ remember: true }}
             onFinish={onSumbit}
-            // onFinishFailed={onFinishFailed}
             autoComplete="off"
             className={clsx(styles.formAdd)}
           >
             <div className={clsx(styles.firstLine)}>
               <div>
                 <Form.Item
-                  label="Natural Resource "
-                  name="naturalResource"
-                  rules={[{ required: true, message: 'Please input your Natural Resource !' }]}
+                  label="Area"
+                  name="area"
+                  rules={[{ required: true, message: 'Please input your Area !' }]}
                   className={clsx(styles.formNaturalResource)}
                 >
                   <Select
-                    placeholder="Select a Natural Resource "
+                    placeholder="Select a Area "
                     onChange={onNaturalResourceChange}
                     allowClear
                     className={clsx(styles.customInput)}
@@ -145,7 +140,74 @@ const AddProject: NextPage = () => {
               </div>
             </div>
             <div className={clsx(styles.projectDetail)}>
-              <div className={clsx(styles.title)}>Project details</div>
+              <div className={clsx(styles.title)}>Project Information</div>
+              <div className={clsx(styles.thirdLine)}>
+                <Row style={{ display: 'flex', flexDirection: 'row' }}>
+                  <Col span={12}>
+                    <Row className={clsx(styles.left)}>
+                      <Col span={12}>
+                        <Form.Item
+                          label="From year"
+                          name="fromYear"
+                          rules={[
+                            { required: true, message: 'Please input your From year !' },
+                            {
+                              max: 4,
+                              message: 'The value is only 4 characters',
+                            },
+                          ]}
+                          className={clsx(styles.left)}
+                        >
+                          <Input
+                            type="number"
+                            maxLength={4}
+                            placeholder="Enter the From year"
+                            className={clsx(styles.formItem)}
+                            onChange={() => onChangeFormYear()}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12} style={{ display: 'flex', alignItems: 'center' }}>
+                        <Form.Item
+                          label="To Year"
+                          name="toYear"
+                          rules={[
+                            { required: true, message: 'Please input your To year!' },
+                            {
+                              max: 4,
+                              message: 'The value is only 4 characters',
+                            },
+                          ]}
+                          className={clsx(styles.right)}
+                        >
+                          <Input
+                            type="number"
+                            maxLength={4}
+                            placeholder="Enter the To year"
+                            className={clsx(styles.formItem)}
+                            onChange={() => onChangeToYear()}
+                          />
+                        </Form.Item>
+                        <CheckOutlined className={clsx(styles.icon)} onClick={() => onClick()}/>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col span={12}>
+                    <Row className={clsx(styles.right)}>
+                      <Form.Item
+                        label="Additional information"
+                        name="information"
+                        rules={[{ required: true, message: 'Please input your Additional information' }]}
+                        className={clsx(styles.left)}
+                      >
+                        <Upload {...props}>
+                          <Button icon={<UploadOutlined />}>Import file</Button>
+                        </Upload>
+                      </Form.Item>
+                    </Row>
+                  </Col>
+                </Row>
+              </div>
               <div className={clsx(styles.secondLine)}>
                 <Form.Item
                   label="Project Name"
@@ -154,7 +216,7 @@ const AddProject: NextPage = () => {
                   className={clsx(styles.left, styles.formItem)}
                   style={{ marginRight: 40 }}
                 >
-                  <Input placeholder="Enter the Natural Project Name" />
+                  <Input placeholder="Enter the Project Name" />
                 </Form.Item>
                 <Form.Item
                   label="Project Number"
@@ -162,93 +224,41 @@ const AddProject: NextPage = () => {
                   rules={[{ required: true, message: 'Please input your Project Number!' }]}
                   className={clsx(styles.right)}
                 >
-                  <Input placeholder="Enter the Project Number " />
+                  <Input type="number" placeholder="Enter the Project Number " />
                 </Form.Item>
               </div>
               <div className={clsx(styles.thirdLine)}>
-                <Form.Item
-                  label="Expected Start Date"
-                  name="expectedStartDate"
-                  rules={[{ required: true, message: 'Please input your Natural Resource Type!' }]}
-                  className={clsx(styles.left, styles.formItem)}
-                  style={{ marginRight: 40 }}
-                >
-                  <DatePicker
-                    onChange={onExpectedStartDateChange}
-                    style={{ height: 40 }}
-                    className={clsx(styles.input100)}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label="Expected End Date"
-                  name="expectedEndDate"
-                  rules={[{ required: true, message: 'Please input your Expected End Date!' }]}
-                  className={clsx(styles.right)}
-                >
-                  <DatePicker
-                    onChange={onExpectedEndDateChange}
-                    style={{ height: 40 }}
-                    className={clsx(styles.input100)}
-                  />
-                </Form.Item>
-              </div>
-              <div className={styles.fourLine}>
-                <Form.Item
-                  label="Actual Start Date"
-                  name="ActualStartDate"
-                  rules={[{ required: true, message: 'Please input your Actual Start Date!' }]}
-                  className={clsx(styles.left, styles.formItem)}
-                  style={{ marginRight: 40 }}
-                >
-                  <DatePicker
-                    onChange={onActualStartDateChange}
-                    style={{ height: 40 }}
-                    className={clsx(styles.input100)}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label="Actual End Date"
-                  name="actualEndDate"
-                  rules={[{ required: true, message: 'Please input your Actual End Date!' }]}
-                  className={clsx(styles.right)}
-                >
-                  <DatePicker
-                    onChange={onActualEndDateChange}
-                    style={{ height: 40 }}
-                    className={clsx(styles.input100)}
-                  />
-                </Form.Item>
-              </div>
-              <div className={styles.fiveLine}>
-                <Form.Item
-                  label="Status"
-                  name="status"
-                  rules={[{ required: true, message: 'Please input your Status !' }]}
-                  className={clsx(styles.left, styles.formItem)}
-                  style={{ marginRight: 40 }}
-                >
-                  <Select
-                    placeholder="Select a Status "
-                    onChange={onNaturalResourceChange}
-                    allowClear
-                    // className={clsx(styles.customInput)}
-                    // style={{ maxWidth: '186px', width: '100%' }}
-                    className={clsx(styles.input100)}
-                  >
-                    <Option value="open">open</Option>
-                    <Option value="pending">pending</Option>
-                    <Option value="close">close</Option>
-                    <Option value="other">other</Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  label="Progress (%)"
-                  name="progress"
-                  rules={[{ required: true, message: 'Please input your Progress (%)!' }]}
-                  className={clsx(styles.right)}
-                >
-                  <Input placeholder="Enter the Progress (%) " />
-                </Form.Item>
+                <Row style={{ display: 'flex', flexDirection: 'row' }}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Application number"
+                      name="applicationNumber"
+                      rules={[{ required: true, message: 'Please input your Application Number' }]}
+                      className={clsx(styles.left)}
+                    >
+                      <Input placeholder="Enter the Application Number" className={clsx(styles.formItem)} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12} style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Form.Item
+                      label="Project Type"
+                      name="projectType"
+                      rules={[{ required: true, message: 'Please input your Project Type' }]}
+                      className={clsx(styles.right)}
+                    >
+                      <Select
+                        placeholder="Select Project Type"
+                        onChange={onNaturalResourceChange}
+                        allowClear
+                        className={clsx(styles.customInput)}
+                      >
+                        <Option value="CO2">CO2</Option>
+                        <Option value="water">Water</Option>
+                        <Option value="solid">Solid</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
               </div>
               <Form.Item
                 label="Project's Description"
@@ -259,62 +269,25 @@ const AddProject: NextPage = () => {
                 <TextArea rows={6} placeholder="Enter the description of the Project" />
               </Form.Item>
             </div>
-            <div className={clsx(styles.environmentalValueType)}>
-              <Form
-                name="environmentalValueType"
-                initialValues={{ remember: true }}
-                // onFinish={onFinish}
-                // onFinishFailed={onFinishFailed}
-                autoComplete="off"
-                className={styles.formAdd}
-              >
-                <div className={styles.sixLine}>
-                  <Form.Item
-                    label="Start year"
-                    name="startYear"
-                    rules={[{ required: true, message: 'Please input your Start year!' }]}
-                    className={clsx(styles.left, styles.formItem)}
-                    style={{ marginRight: 40 }}
-                  >
-                    <DatePicker
-                      onChange={onExpectedStartDateChange}
-                      style={{ height: 40 }}
-                      className={clsx(styles.input100)}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="End Year"
-                    name="endYear"
-                    rules={[{ required: true, message: 'Please input your End Year!' }]}
-                    className={clsx(styles.right)}
-                  >
-                    <DatePicker
-                      onChange={onExpectedStartDateChange}
-                      style={{ height: 40 }}
-                      className={clsx(styles.input100)}
-                    />
-                  </Form.Item>
-                </div>
-                <div className={clsx(styles.sevenLine)}>
-                  <Form.Item
-                    label="Environmental Value Type "
-                    name="environmentalValueType"
-                    rules={[{ required: true, message: 'Please input your Environmental Value Type !' }]}
-                    className={clsx(styles.input100)}
-                  >
-                    <Select
-                      placeholder="Select a Environmental Value Type "
-                      onChange={onNaturalResourceChange}
-                      allowClear
-                      className={clsx(styles.customInput, styles.input100)}
-                    >
-                      <Option value="male">male</Option>
-                      <Option value="female">female</Option>
-                      <Option value="other">other</Option>
-                    </Select>
-                  </Form.Item>
-                </div>
-              </Form>
+            <div className={clsx(styles.environmentValueInfo)}>
+              <div className={clsx(styles.title)}>Environmental Volume Information</div>
+              <div className={clsx(styles.information)}>
+                <Row gutter={[16, 24]} style={{ display: 'flex', flexDirection: 'row' }}>
+                  <Col className="gutter-row" span={6}>
+                    <div className={clsx(styles.boderGray)}>Year</div>
+                  </Col>
+                  <Col className="gutter-row" span={6}>
+                    <div className={clsx(styles.boderGray)}>Estimated volume</div>
+                  </Col>
+                  <Col className="gutter-row" span={6}>
+                    <div className={clsx(styles.boderGray)}>Actual volume</div>
+                  </Col>
+                  <Col className="gutter-row" span={6}>
+                    <div className={clsx(styles.boderGray)}>JCredit No.</div>
+                  </Col>
+                  {click ? input(fromYear, toYear): null}
+                </Row>
+              </div>
             </div>
             <Form.Item
               className={clsx(styles.formButton)}
