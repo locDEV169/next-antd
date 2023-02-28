@@ -1,25 +1,26 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, notification, Popover } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, notification } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
 import { authRequest } from 'api/axios';
+import clsx from 'clsx';
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './styles.module.less';
 
 interface DataType {
-  key: React.Key;
-  areaId: 1;
-  name: string;
+  id?: number;
+  areaId?: number;
+  name?: string;
   description?: string;
   fromYear?: number;
   toYear?: number;
   percent?: number;
   type?: string;
-  area?: Area
+  area?: Area;
 }
 interface Area {
-  key: React.Key;
+  id: number;
   area?: string;
   discordLink?: string;
   description?: string;
@@ -28,6 +29,7 @@ interface Area {
   origanization: Origanization;
 }
 interface Origanization {
+  id?: number;
   description?: string;
   discordUrl?: string;
   name?: string;
@@ -35,14 +37,16 @@ interface Origanization {
 }
 
 const Project: NextPage = () => {
-  const [dataSource, setDataSource] = useState<DataType[]>([]);
+  const [dataSource, setDataSource] = useState<any | DataType>([]);
   // const USER_API = process.env.USER_API;
-  const BID_API = 'http://localhost:5000/projects';
+  const PROJECT_API = 'http://localhost:5000/projects';
 
   const getData = async () => {
     try {
-      const response = await authRequest.get(`${BID_API}`, {});
+      const response = await authRequest.get(`${PROJECT_API}`);
       const { data } = response;
+      console.log(data);
+
       setDataSource(data);
     } catch (err) {
       notification.error({
@@ -58,14 +62,7 @@ const Project: NextPage = () => {
   }, []);
   console.log('das', dataSource);
 
-  const content = (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <EditOutlined style={{ color: '#0A04F5', marginBottom: '10px' }} />
-      <DeleteOutlined style={{ color: '#FC5640' }} />
-    </div>
-  );
-
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<any> = [
     {
       title: 'Project',
       dataIndex: 'name',
@@ -73,9 +70,19 @@ const Project: NextPage = () => {
       render: (name) => <div className={styles.projectName}>{name}</div>,
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      render: (name) => <div className={styles.naturalResource}>{name}</div>,
+      title: 'Area',
+      dataIndex: 'area',
+      render: (_text, record: any) => <div className={styles.projectName}>{record.area?.name}</div>,
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      render: (name) => <div className={styles.type}>{name}</div>,
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+      render: (name) => <div className={styles.price}>{name}</div>,
     },
     {
       title: 'Period (year)',
@@ -87,22 +94,41 @@ const Project: NextPage = () => {
       ),
     },
     {
-      title: 'Progress (%)',
-      dataIndex: 'percent',
-    },
-    {
       title: 'Status',
-      dataIndex: 'type',
+      dataIndex: 'status',
+      render: (name) => <div className={styles.status}>{name}</div>,
     },
     {
       title: '',
       dataIndex: 'popover',
       // key: 'x',
-      render: (text, _record) => (
-        <div className={styles.tooltip} style={{ cursor: 'pointer' }}>
-          <Popover placement="leftBottom" title={text} content={content} trigger="hover">
-            ...
-          </Popover>
+      width: 120,
+      render: (_text, _record) => (
+        <div className={styles.tooltip} style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column' }}>
+          <Button
+            type="ghost"
+            htmlType="submit"
+            style={{ width: 85, height: 30 }}
+            className={clsx(styles.buttonSubmit)}
+          >
+            Edit
+          </Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ width: 85, height: 30, margin: '10px 0px' }}
+            className={clsx(styles.buttonSubmit)}
+          >
+            Remove
+          </Button>
+          <Button
+            type="ghost"
+            htmlType="submit"
+            style={{ width: 85, height: 30 }}
+            className={clsx(styles.buttonSubmit)}
+          >
+            Public
+          </Button>
         </div>
       ),
     },
@@ -116,6 +142,7 @@ const Project: NextPage = () => {
     <div>
       <div className={styles.content}>
         <div className={styles.headerContent}>
+          <div className={clsx(styles.title)}>Project List</div>
           <Link href="/project/add-project">
             <Button type="primary" className={styles.buttonAdd}>
               <PlusOutlined />
