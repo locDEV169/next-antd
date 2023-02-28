@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
 import { authRequest } from 'api/axios';
@@ -49,13 +49,6 @@ const Area: NextPage = () => {
     getData();
   }, []);
   console.log(dataSource);
-
-  const content = (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <EditOutlined style={{ color: '#0A04F5', marginBottom: '10px' }} />
-      <DeleteOutlined style={{ color: '#FC5640' }} />
-    </div>
-  );
 
   const columns: ColumnsType<DataType> = [
     {

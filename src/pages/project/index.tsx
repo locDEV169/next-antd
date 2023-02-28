@@ -37,7 +37,7 @@ interface Origanization {
 }
 
 const Project: NextPage = () => {
-  const [dataSource, setDataSource] = useState<any | DataType>([]);
+  const [dataSource, setDataSource] = useState<DataType[]>([]);
   // const USER_API = process.env.USER_API;
   const PROJECT_API = 'http://localhost:5000/projects';
 
@@ -62,7 +62,7 @@ const Project: NextPage = () => {
   }, []);
   console.log('das', dataSource);
 
-  const columns: ColumnsType<any> = [
+  const columns: ColumnsType<DataType> = [
     {
       title: 'Project',
       dataIndex: 'name',
@@ -72,7 +72,7 @@ const Project: NextPage = () => {
     {
       title: 'Area',
       dataIndex: 'area',
-      render: (_text, record: any) => <div className={styles.projectName}>{record.area?.name}</div>,
+      render: (_text, record: DataType) => <div className={styles.projectName}>{record.area?.name}</div>,
     },
     {
       title: 'Type',
@@ -87,7 +87,7 @@ const Project: NextPage = () => {
     {
       title: 'Period (year)',
       dataIndex: ['fromYear', 'toYear'],
-      render: (_text, record: any) => (
+      render: (_text, record: DataType) => (
         <div className={styles.naturalResource}>
           {record.fromYear} - {record.toYear}
         </div>
