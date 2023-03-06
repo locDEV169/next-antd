@@ -36,7 +36,7 @@ const AddProject: NextPage = () => {
   const PROJECT_API = 'projects';
   const [fromYear, setFromYear] = useState<number>(0);
   const [toYear, setToYear] = useState<number>(0);
-  const [click,setClick] = useState(false)
+  const [click, setClick] = useState(false);
 
   const onNaturalResourceChange = (value: string) => {
     switch (value) {
@@ -73,28 +73,60 @@ const AddProject: NextPage = () => {
   };
 
   const onClick = () => {
-    setClick(true)
-  }
+    setClick(true);
+  };
 
   const input = (fromYear: number, toYear: number) => {
-    const a = toYear - fromYear
+    const a = toYear - fromYear;
 
-    return a > 0 ? [...new Array(a)].map((_item, index) => {
-      return <Fragment>
-      <Col className="gutter-row" span={6}>
-        <div>{Number(fromYear) + index + 1}</div>
-      </Col>
-      <Col className="gutter-row" span={6}>
-        <div>col-6</div>
-      </Col>
-      <Col className="gutter-row" span={6}>
-        <div>col-6</div>
-      </Col>
-      <Col className="gutter-row" span={6}>
-        <div>col-6</div>
-      </Col>
-    </Fragment>
-    }) : null
+    return a > 0 && toYear < 9999
+      ? [...new Array(a+1)].map((_item, index) => {
+          console.log(index, index + 1);
+
+          return (
+            <Fragment>
+              <Col className={styles.years} span={6}>
+                <div>{Number(fromYear) + index}</div>
+              </Col>
+              <Col className="gutter-row" span={6}>
+                <div>
+                  <Input
+                    type="number"
+                    maxLength={4}
+                    placeholder="Enter the Estimated Volume"
+                    className={clsx(styles.formItem)}
+                    // onChange={() => onChangeFormYear()}
+                  />
+                </div>
+              </Col>
+              <Col className="gutter-row" span={6}>
+                <div>
+                  <Input
+                    type="number"
+                    maxLength={4}
+                    placeholder="Enter the Actual Volumer"
+                    className={clsx(styles.formItem)}
+                    // onChange={() => onChangeFormYear()}
+                    disabled
+                  />
+                </div>
+              </Col>
+              <Col className="gutter-row" span={6}>
+                <div>
+                  <Input
+                    type="number"
+                    maxLength={4}
+                    placeholder="Enter the JCredit No"
+                    className={clsx(styles.formItem)}
+                    // onChange={() => onChangeFormYear()}
+                    disabled
+                  />
+                </div>
+              </Col>
+            </Fragment>
+          );
+        })
+      : null;
   };
 
   return (
@@ -188,7 +220,7 @@ const AddProject: NextPage = () => {
                             onChange={() => onChangeToYear()}
                           />
                         </Form.Item>
-                        <CheckOutlined className={clsx(styles.icon)} onClick={() => onClick()}/>
+                        <CheckOutlined className={clsx(styles.icon)} onClick={() => onClick()} />
                       </Col>
                     </Row>
                   </Col>
@@ -254,7 +286,6 @@ const AddProject: NextPage = () => {
                       >
                         <Option value="CO2">CO2</Option>
                         <Option value="water">Water</Option>
-                        <Option value="solid">Solid</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -277,15 +308,27 @@ const AddProject: NextPage = () => {
                     <div className={clsx(styles.boderGray)}>Year</div>
                   </Col>
                   <Col className="gutter-row" span={6}>
-                    <div className={clsx(styles.boderGray)}>Estimated volume</div>
+                    <div className={clsx(styles.boderGray)}>Estimated Volume</div>
                   </Col>
                   <Col className="gutter-row" span={6}>
-                    <div className={clsx(styles.boderGray)}>Actual volume</div>
+                    <div className={clsx(styles.boderGray)}>Actual Volume</div>
                   </Col>
                   <Col className="gutter-row" span={6}>
                     <div className={clsx(styles.boderGray)}>JCredit No.</div>
                   </Col>
-                  {click ? input(fromYear, toYear): null}
+                  {click ? input(fromYear, toYear) : null}
+                  <Col className="gutter-row" span={6}>
+                    <div className={clsx(styles.boderGray)}>Total</div>
+                  </Col>
+                  <Col className="gutter-row" span={6}>
+                    <div className={clsx(styles.boderGray)}>0</div>
+                  </Col>
+                  <Col className="gutter-row" span={6}>
+                    <div className={clsx(styles.boderGray)}>0</div>
+                  </Col>
+                  <Col className="gutter-row" span={6}>
+                    <div className={clsx(styles.boderGray)}>0</div>
+                  </Col>
                 </Row>
               </div>
             </div>

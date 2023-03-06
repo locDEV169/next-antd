@@ -1,7 +1,6 @@
 import { Layout, MenuProps, Tabs } from 'antd';
 import Area from 'pages/area';
 import EnvironmentalValues from 'pages/environmental-values';
-import NaturalResource from 'pages/natural-resources';
 import Project from 'pages/project';
 import { FC } from 'react';
 import styles from './styles.module.less';
@@ -10,8 +9,6 @@ const renderItem = (data: string) => {
   switch (data) {
     case 'Area':
       return <Area />;
-    case 'Natural Resources':
-      return <NaturalResource />;
     case 'Project':
       return (
         <div>
@@ -29,9 +26,8 @@ const renderItem = (data: string) => {
   }
 };
 
-const items: MenuProps['items'] | any[] | undefined = [
+const items: MenuProps['items'] | any[] | undefined | any= [
   'Area',
-  'Natural Resources',
   'Project',
   'Environmental Values',
 ].map((item) => {
